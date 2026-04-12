@@ -1,0 +1,66 @@
+<div class="admin-users">
+  <div class="page-header">
+    <h2>Users management</h2>
+  </div>
+
+  <div class="filter-bar">
+    <p-iconfield>
+      <p-inputicon styleClass="pi pi-search" />
+      <input pInputText placeholder="Search by name or email..."
+             [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" />
+    </p-iconfield>
+    <p-select [options]="roleOptions" [(ngModel)]="roleFilter" placeholder="All roles"
+              [showClear]="true" />
+    <p-select [options]="statusOptions" [(ngModel)]="statusFilter" placeholder="All statuses"
+              [showClear]="true" />
+    @if (searchQuery() || roleFilter() || statusFilter()) {
+      <p-button icon="pi pi-filter-slash" label="Clear" severity="secondary"
+                [text]="true" (click)="clearFilters()" />
+    }
+  </div>
+
+  <p-table [value]="filteredUsers()" [loading]="isLoading()" [paginator]="true" [rows]="10"
+           [tableStyle]="{ 'min-width': '50rem' }" [scrollable]="true">
+    <ng-template #header>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Registered</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-user>
+      <tr>
+        <td>{{ user.firstName }} {{ user.lastName }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+          <p-tag [value]="user.role" [severity]="user.role === 'ADMIN' ? 'warn' : 'info'" />
+        </td>
+        <td>
+          <p-tag [value]="user.isBlocked ? 'Blocked' : 'Active'"
+                 [severity]="user.isBlocked ? 'danger' : 'success'" />
+        </td>
+        <td>{{ user.createdAt | date:'mediumDate' }}</td>
+        <td class="actions-cell">
+          @if (!isSelf(user)) {
+            <p-button [icon]="user.role === 'ADMIN' ? 'pi pi-user' : 'pi pi-shield'"
+                      [pTooltip]="user.role === 'ADMIN' ? 'Make user' : 'Make admin'"
+                      severity="secondary" [text]="true"
+                      (click)="toggleRole(user)" />
+            <p-button [icon]="user.isBlocked ? 'pi pi-lock-open' : 'pi pi-lock'"
+                      [pTooltip]="user.isBlocked ? 'Unblock' : 'Block'"
+                      [severity]="user.isBlocked ? 'success' : 'danger'" [text]="true"
+                      (click)="toggleBlock(user)" />
+          }
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="6" class="empty-message">No users found</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

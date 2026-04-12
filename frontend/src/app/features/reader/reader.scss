@@ -1,0 +1,286 @@
+.reader-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.reader-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 3px solid transparent;
+  border-image: var(--athena-gradient-primary) 1;
+  background: var(--p-surface-card);
+  box-shadow: var(--athena-shadow-sm);
+
+  .book-title {
+    flex: 1;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .toolbar-actions {
+    display: flex;
+    gap: 0.25rem;
+  }
+}
+
+.reader-progress-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4rem 1rem;
+  background: var(--p-surface-card);
+  border-bottom: 1px solid var(--p-content-border-color);
+}
+
+.progress-track {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--p-surface-ground);
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--athena-gradient-primary);
+  box-shadow: 0 0 8px rgba(10, 196, 224, 0.4);
+  transition: width 0.5s var(--athena-ease);
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -1px;
+    width: 12px;
+    height: 8px;
+    border-radius: 4px;
+    background: #0AC4E0;
+    box-shadow: 0 0 10px rgba(10, 196, 224, 0.6);
+  }
+}
+
+.progress-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--athena-ocean);
+  min-width: 36px;
+  text-align: right;
+}
+
+.reader-loading {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--p-text-muted-color);
+}
+
+.epub-container {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  overflow: hidden;
+}
+
+.epub-area {
+  flex: 1;
+  overflow: hidden;
+}
+
+// PrimeNG buttons are projected into the reader; ::ng-deep pierces encapsulation so overlay
+// nav controls sit above the EPUB/PDF viewport without duplicating theme tokens here.
+:host ::ng-deep .nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  font-size: 1.5rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50% !important;
+  background: var(--athena-surface-hover) !important;
+  color: var(--athena-text-primary) !important;
+  backdrop-filter: blur(4px);
+  opacity: 0.7;
+  transition: opacity var(--athena-duration-fast) var(--athena-ease),
+              background var(--athena-duration-fast) var(--athena-ease),
+              box-shadow var(--athena-duration-fast) var(--athena-ease),
+              transform var(--athena-duration-fast) var(--athena-ease);
+
+  &:hover:not(:disabled) {
+    opacity: 1;
+    background: var(--athena-gradient-cool) !important;
+    color: white !important;
+    box-shadow: var(--athena-shadow-md);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  &:disabled {
+    opacity: 0.2 !important;
+  }
+}
+
+:host ::ng-deep .nav-prev {
+  left: 0.75rem;
+}
+
+:host ::ng-deep .nav-next {
+  right: 0.75rem;
+}
+
+.pdf-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.pdf-page-indicator {
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--athena-radius-full);
+  background: var(--athena-surface-elevated);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--athena-border-focus);
+  box-shadow: var(--athena-shadow-sm);
+
+.pdf-page-current {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--athena-ocean);
+}
+
+.pdf-page-sep {
+  font-size: 0.75rem;
+  color: var(--p-text-muted-color);
+}
+
+.pdf-page-total {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--p-text-muted-color);
+}
+
+.pdf-scroll {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  background: #f4f8fa;
+}
+
+.pdf-page-wrapper {
+  position: relative;
+  display: inline-block;
+
+  canvas {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+// Text layer sits above the canvas (z-index) but text is transparent so only selection/highlight
+// tint shows; pointer-events stay on so mouseup selection can reach the chat/highlight pipeline.
+.pdf-text-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  line-height: 1;
+  z-index: 2;
+
+  :host ::ng-deep & {
+    span, br {
+      color: transparent;
+      position: absolute;
+      white-space: pre;
+      pointer-events: all;
+      transform-origin: 0% 0%;
+    }
+
+    span::selection {
+      background: rgba(9, 146, 194, 0.4);
+    }
+  }
+}
+
+.add-bookmark {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+
+  input {
+    flex: 1;
+  }
+}
+
+.no-bookmarks {
+  text-align: center;
+  color: var(--p-text-muted-color);
+  padding: 2rem 0;
+}
+
+.bookmarks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.bookmark-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--athena-radius-sm);
+  background: var(--athena-gradient-card);
+  box-shadow: var(--athena-shadow-sm);
+  cursor: pointer;
+  transition: transform var(--athena-duration-fast) var(--athena-ease),
+              box-shadow var(--athena-duration-fast) var(--athena-ease);
+
+  &:hover {
+    transform: translateX(4px);
+    box-shadow: var(--athena-shadow-md);
+  }
+}
+
+.bookmark-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.bookmark-title {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.bookmark-position {
+  font-size: 0.75rem;
+  color: var(--p-text-muted-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+}

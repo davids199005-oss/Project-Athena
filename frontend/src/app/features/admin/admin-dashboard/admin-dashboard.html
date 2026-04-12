@@ -1,0 +1,151 @@
+@if (isLoading()) {
+  <div class="dashboard">
+    <div class="stats-grid">
+      @for (i of [1, 2, 3, 4]; track i) {
+        <div class="stat-card skeleton-card">
+          <p-skeleton width="2.5rem" height="2.5rem" shape="circle" />
+          <p-skeleton width="60%" height="1.5rem" styleClass="mt-3" />
+          <p-skeleton width="40%" height="1rem" styleClass="mt-2" />
+        </div>
+      }
+    </div>
+    <div class="activity-grid">
+      @for (i of [1, 2, 3]; track i) {
+        <div class="activity-section skeleton-card">
+          <p-skeleton width="50%" height="1.2rem" />
+          @for (j of [1, 2, 3]; track j) {
+            <p-skeleton width="100%" height="2.5rem" styleClass="mt-3" />
+          }
+        </div>
+      }
+    </div>
+  </div>
+} @else {
+  <div class="dashboard">
+    <h2 class="dashboard-title">Dashboard</h2>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon users">
+          <i class="pi pi-users"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ totalUsers() }}</span>
+          <span class="stat-label">Users</span>
+        </div>
+        <div class="stat-badge">
+          <p-tag [value]="'+' + newUsersThisMonth() + ' this month'" severity="success" />
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon books">
+          <i class="pi pi-book"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ totalBooks() }}</span>
+          <span class="stat-label">Books</span>
+        </div>
+        <div class="stat-meta">
+          @for (g of genreDistribution(); track g.genre) {
+            <span class="genre-chip">{{ g.genre }}: {{ g.count }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon reviews">
+          <i class="pi pi-star-fill"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ totalReviews() }}</span>
+          <span class="stat-label">Reviews</span>
+        </div>
+        <div class="stat-badge">
+          <p-tag [value]="'Avg: ' + averageRating() + ' ★'" severity="warn" />
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon ai">
+          <i class="pi pi-bolt"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ totalAiSessions() }}</span>
+          <span class="stat-label">AI Sessions</span>
+        </div>
+        <div class="stat-badge">
+          <p-tag [value]="formatTokens(totalTokensUsed()) + ' tokens'" severity="info" />
+        </div>
+      </div>
+    </div>
+
+    <div class="activity-grid">
+      <div class="activity-section">
+        <h3><i class="pi pi-user-plus"></i> Recent Users</h3>
+        @if (recentUsers().length === 0) {
+          <p class="empty-text">No users yet</p>
+        } @else {
+          <ul class="activity-list">
+            @for (user of recentUsers(); track user.id) {
+              <li>
+                <div class="activity-main">
+                  <span class="activity-name">{{ user.firstName }} {{ user.lastName }}</span>
+                  <span class="activity-detail">{{ user.email }}</span>
+                </div>
+                <span class="activity-date">{{ user.createdAt | date:'shortDate' }}</span>
+              </li>
+            }
+          </ul>
+        }
+        <a routerLink="../users" class="section-link">View all users <i class="pi pi-arrow-right"></i></a>
+      </div>
+
+      <div class="activity-section">
+        <h3><i class="pi pi-book"></i> Recent Books</h3>
+        @if (recentBooks().length === 0) {
+          <p class="empty-text">No books yet</p>
+        } @else {
+          <ul class="activity-list">
+            @for (book of recentBooks(); track book.id) {
+              <li>
+                <div class="activity-main">
+                  <span class="activity-name">{{ book.title }}</span>
+                  <span class="activity-detail">{{ book.author }}</span>
+                </div>
+                <p-tag [value]="book.genre" severity="secondary" />
+              </li>
+            }
+          </ul>
+        }
+        <a routerLink="../books" class="section-link">View all books <i class="pi pi-arrow-right"></i></a>
+      </div>
+
+      <div class="activity-section">
+        <h3><i class="pi pi-star"></i> Recent Reviews</h3>
+        @if (recentReviews().length === 0) {
+          <p class="empty-text">No reviews yet</p>
+        } @else {
+          <ul class="activity-list">
+            @for (review of recentReviews(); track review.id) {
+              <li>
+                <div class="activity-main">
+                  <span class="activity-name">
+                    @for (star of [1,2,3,4,5]; track star) {
+                      <i [class]="star <= review.rating ? 'pi pi-star-fill star-filled' : 'pi pi-star star-empty'"></i>
+                    }
+                  </span>
+                  <span class="activity-detail">
+                    {{ review.user?.firstName }} {{ review.user?.lastName }}
+                    — {{ review.book?.title }}
+                  </span>
+                </div>
+                <span class="activity-date">{{ review.createdAt | date:'shortDate' }}</span>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+    </div>
+  </div>
+}

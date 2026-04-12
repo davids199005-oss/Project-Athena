@@ -1,0 +1,58 @@
+<div class="catalog page-shell">
+    <div class="catalog-header">
+      <h1>Book catalog</h1>
+    </div>
+
+    <div class="catalog-filters">
+      <div class="filter-search">
+        <input pInputText
+               [(ngModel)]="search"
+               placeholder="Search by title or author..."
+               (keydown.enter)="onSearch()" />
+      </div>
+
+      <p-select [options]="genres"
+                [(ngModel)]="selectedGenre"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Genre"
+                (onChange)="onFilterChange()" />
+
+      <p-select [options]="languages"
+                [(ngModel)]="selectedLanguage"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Language"
+                (onChange)="onFilterChange()" />
+
+      <p-select [options]="sortOptions"
+                [(ngModel)]="selectedSort"
+                optionLabel="label"
+                optionValue="value"
+                (onChange)="onFilterChange()" />
+    </div>
+
+    @if (isLoading()) {
+      <div class="catalog-grid">
+        @for (i of [1,2,3,4,5,6,7,8]; track i) {
+          <app-skeleton-card />
+        }
+      </div>
+    } @else if (books().length === 0) {
+      <div class="catalog-empty">
+        <i class="pi pi-book"></i>
+        <p>No books found</p>
+      </div>
+    } @else {
+      <div class="catalog-grid">
+        @for (book of books(); track book.id; let i = $index) {
+          <app-book-card [book]="book" [class]="'animate-fade-in-up stagger-' + (i % 12 + 1)" />
+        }
+      </div>
+
+      <p-paginator [rows]="limit"
+                   [totalRecords]="totalRecords()"
+                   [first]="(page - 1) * limit"
+                   (onPageChange)="onPageChange($event)" />
+    }
+  </div>

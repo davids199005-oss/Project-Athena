@@ -1,0 +1,51 @@
+@use 'styles/breakpoints' as bp;
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  transition: transform var(--athena-duration-fast) var(--athena-ease);
+
+  &:hover {
+    transform: translateY(-1px);
+
+    .logo-mark {
+      box-shadow: var(--athena-shadow-md), 0 0 24px rgba(45, 181, 168, 0.25);
+    }
+  }
+}
+
+// Custom header art: rounded frame + soft lift reads as “jewel” on the glass bar.
+.logo-mark {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--athena-radius-md);
+  object-fit: cover;
+  box-shadow: var(--athena-shadow-sm);
+  border: 1px solid var(--athena-border-card);
+  transition:
+    box-shadow var(--athena-duration-normal) var(--athena-ease),
+    transform var(--athena-duration-fast) var(--athena-ease);
+}
+
+.logo-text {
+  font-family: var(--athena-font-display);
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--athena-navy);
+  background: var(--athena-gradient-cool);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  @include bp.mobile {
+    font-size: 1.05rem;
+  }
+}

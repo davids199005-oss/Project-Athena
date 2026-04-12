@@ -1,0 +1,78 @@
+@use 'styles/breakpoints' as bp;
+
+.admin-reviews {
+  .page-header {
+    margin-bottom: 1.5rem;
+
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin: 0;
+      color: var(--athena-navy);
+      background: var(--athena-gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  }
+}
+
+:host ::ng-deep .p-datatable-thead > tr > th {
+  background: var(--athena-gradient-primary) !important;
+  color: white !important;
+  border: none !important;
+  font-weight: 600;
+}
+
+.book-info,
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.book-title,
+.user-name {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.book-author,
+.user-email {
+  font-size: 0.75rem;
+  color: var(--p-text-muted-color);
+}
+
+.rating-stars {
+  display: inline-flex;
+  gap: 0.1rem;
+}
+
+.star-filled {
+  color: #f59e0b;
+  font-size: 0.85rem;
+}
+
+.star-empty {
+  color: #d1d5db;
+  font-size: 0.85rem;
+}
+
+.review-text-cell {
+  max-width: 250px;
+
+  span {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: var(--athena-text-sm);
+    color: var(--p-text-color);
+  }
+}
+
+.empty-message {
+  text-align: center;
+  color: var(--p-text-muted-color);
+  padding: var(--athena-space-8) !important;
+}

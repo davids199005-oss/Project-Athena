@@ -1,0 +1,52 @@
+// Footer: gradient band + glass lift — separates app chrome from scroll-end without heavy contrast.
+.footer {
+  position: relative;
+  margin-top: auto;
+  padding: 2.25rem 1.5rem;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0a1f33 0%, #0c2744 42%, #0f4f6d 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 -12px 40px rgba(12, 39, 68, 0.12);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 20% 0%, rgba(45, 181, 168, 0.2), transparent 55%);
+    pointer-events: none;
+  }
+}
+
+.footer-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-tagline {
+  margin: 0 0 0.5rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--athena-text-on-dark);
+}
+
+.footer-copy {
+  margin: 0;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.75);
+
+  a {
+    color: #e0f4fa;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color var(--athena-duration-fast) var(--athena-ease);
+
+    &:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+  }
+}

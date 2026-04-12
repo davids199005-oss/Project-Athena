@@ -1,0 +1,61 @@
+<div class="login-container">
+  <div class="login-brand">
+    <div class="brand-shapes">
+      <div class="brand-shape brand-shape-1"></div>
+      <div class="brand-shape brand-shape-2"></div>
+    </div>
+    <div class="brand-content">
+      <h2>AthenaAI</h2>
+      <p>Your intelligent library</p>
+    </div>
+  </div>
+  <div class="login-form-side">
+    <!-- Glass card: separates form from ambient gradient without heavy borders. -->
+    <div class="login-card glass-panel animate-fade-in-up">
+      <h1>Welcome back</h1>
+      <p class="subtitle">Sign in to your account</p>
+
+      @if (errorMessage()) {
+        <p-message severity="error" [text]="errorMessage()" />
+      }
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="field">
+          <label for="email">Email</label>
+          <input pInputText id="email" formControlName="email" placeholder="Enter your email" autocomplete="email" />
+          @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors) {
+            <small class="error-text">
+              @if (loginForm.get('email')?.errors?.['required']) {
+                Email is required
+              } @else {
+                Enter a valid email (e.g. name&#64;example.com)
+              }
+            </small>
+          }
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <p-password id="password" formControlName="password" placeholder="Enter your password" [toggleMask]="true" [feedback]="false" autocomplete="current-password" />
+          @if (loginForm.get('password')?.touched && loginForm.get('password')?.errors) {
+            <small class="error-text">
+              @if (loginForm.get('password')?.errors?.['required']) {
+                Password is required
+              } @else {
+                Password must be at least 8 characters
+              }
+            </small>
+          }
+        </div>
+
+        <p-button type="submit" label="Sign In" [loading]="isLoading()" styleClass="w-full" />
+      </form>
+
+      <app-oauth-buttons />
+
+      <p class="register-link">
+        Don't have an account? <a routerLink="/auth/register">Sign up</a>
+      </p>
+    </div>
+  </div>
+</div>

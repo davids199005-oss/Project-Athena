@@ -1,0 +1,91 @@
+<nav class="navbar">
+  <button type="button" class="mobile-menu-btn" (click)="toggleMobileMenu()" aria-label="Toggle menu">
+    <i class="pi" [class.pi-bars]="!mobileMenuOpen()" [class.pi-times]="mobileMenuOpen()"></i>
+  </button>
+
+  <!-- Primary routes — centered on large screens (absolute) so the bar feels balanced with brand + tools. -->
+  <div class="nav-links" [class.open]="mobileMenuOpen()">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobileMenu()">Home</a>
+    <a routerLink="/catalog" routerLinkActive="active" (click)="closeMobileMenu()">Catalog</a>
+    <a routerLink="/profile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" (click)="closeMobileMenu()">My books</a>
+  </div>
+
+  <div class="navbar-end">
+    <!-- Quick CTA: reinforces main value prop without competing with ghost secondary actions. -->
+    <a routerLink="/catalog" class="nav-cta" (click)="closeMobileMenu()">
+      <span>Explore</span>
+      <i class="pi pi-arrow-right"></i>
+    </a>
+
+    <div class="nav-search">
+      <input pInputText
+             [(ngModel)]="searchQuery"
+             placeholder="Search books..."
+             (keydown.enter)="onSearch()" />
+    </div>
+
+    <div class="nav-user">
+    <button type="button" class="notification-btn" (click)="notifPopover.toggle($event)" aria-label="Notifications">
+      <i class="pi pi-bell"></i>
+      @if ((notificationService.unreadCount$ | async); as count) {
+        @if (count > 0) {
+          <p-badge [value]="count.toString()" severity="danger" />
+        }
+      }
+    </button>
+    <p-popover #notifPopover>
+      <div class="notif-dropdown">
+        <div class="notif-header">
+          <span class="notif-title">Notifications</span>
+          <p-button label="Read all" [text]="true" size="small" (click)="notificationService.markAllAsRead()" />
+        </div>
+        @if ((notificationService.notifications$ | async); as notifications) {
+          @if (notifications.length === 0) {
+            <p class="notif-empty">No notifications</p>
+          } @else {
+            <div class="notif-list">
+              @for (n of notifications; track n.id) {
+                <div class="notif-item" [class.unread]="!n.isRead" (click)="onNotificationClick(n)">
+                  <div class="notif-icon">
+                    @switch (n.type) {
+                      @case ('NEW_BOOK') { <i class="pi pi-book"></i> }
+                      @case ('SUMMARY_READY') { <i class="pi pi-sparkles"></i> }
+                      @case ('READING_REMINDER') { <i class="pi pi-clock"></i> }
+                      @default { <i class="pi pi-bell"></i> }
+                    }
+                  </div>
+                  <div class="notif-content">
+                    <span class="notif-item-title">{{ n.title }}</span>
+                    <span class="notif-message">{{ n.message }}</span>
+                    <span class="notif-date">{{ n.createdAt | date:'short' }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        }
+      </div>
+    </p-popover>
+
+    <button
+      type="button"
+      class="user-avatar-trigger"
+      (click)="userMenu.toggle($event)"
+      aria-label="Open profile menu"
+    >
+      <p-avatar [label]="userInitials()"
+                [image]="user()?.avatarUrl || ''"
+                shape="circle"
+                size="normal"
+                styleClass="user-avatar" />
+    </button>
+    <p-menu
+      #userMenu
+      [model]="userMenuItems()"
+      [popup]="true"
+      appendTo="body"
+      styleClass="user-menu-popup"
+    />
+    </div>
+  </div>
+</nav>

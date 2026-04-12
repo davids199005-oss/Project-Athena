@@ -1,0 +1,72 @@
+@if (isOpen()) {
+    <div class="chat-overlay" (click)="close()"></div>
+    <div class="chat-window">
+      <div class="chat-header">
+        <div class="chat-header-left">
+          <p-button icon="pi pi-list" severity="secondary" [text]="true"
+                    (click)="showSessions.set(!showSessions())" />
+          <span class="chat-title">AI Chat</span>
+        </div>
+        <div class="chat-header-right">
+          <p-button icon="pi pi-plus" severity="secondary" [text]="true"
+                    (click)="createNewSession()" />
+          <p-button icon="pi pi-times" severity="secondary" [text]="true"
+                    (click)="close()" />
+        </div>
+      </div>
+
+      @if (showSessions()) {
+        <div class="sessions-panel">
+          @for (session of sessions(); track session.id) {
+            <div class="session-item" [class.active]="session.id === activeSession()?.id"
+                 (click)="selectSession(session)">
+              <i class="pi pi-comments"></i>
+              <span>{{ session.book?.title || 'Chat session' }}</span>
+              <p-button icon="pi pi-trash" severity="danger" [text]="true" size="small"
+                        (click)="deleteSession($event, session)" />
+            </div>
+          }
+        </div>
+      }
+
+      <div class="chat-messages" aria-live="polite">
+        @if (isLoadingMessages()) {
+          <div class="chat-loading">
+            <p-progressSpinner strokeWidth="3" [style]="{ width: '30px', height: '30px' }" />
+          </div>
+        } @else if (messages().length === 0) {
+          <div class="chat-empty">
+            <i class="pi pi-comments"></i>
+            <p>Ask anything about this book</p>
+          </div>
+        } @else {
+          @for (msg of messages(); track msg.id) {
+            <div class="message" [class.user]="msg.role === ChatMessageRole.USER"
+                 [class.assistant]="msg.role === ChatMessageRole.ASSISTANT">
+              <div class="message-bubble">{{ msg.content }}</div>
+            </div>
+          }
+        }
+        @if (isSending()) {
+          <div class="message assistant">
+            @if (streamingContent()) {
+              <div class="message-bubble">{{ streamingContent() }}</div>
+            } @else {
+              <div class="message-bubble typing">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+              </div>
+            }
+          </div>
+        }
+        <div #messagesEnd></div>
+      </div>
+
+      <div class="chat-input">
+        <input pInputText [(ngModel)]="messageInput" placeholder="Ask about the book..."
+               (keydown.enter)="sendMessage()" [disabled]="isSending()" />
+        <p-button icon="pi pi-send" (click)="sendMessage()" [disabled]="isSending() || !messageInput.trim()" [loading]="isSending()" aria-label="Send message" />
+      </div>
+    </div>
+  }

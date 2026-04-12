@@ -1,0 +1,60 @@
+<div class="admin-reviews">
+  <div class="page-header">
+    <h2>Reviews moderation</h2>
+  </div>
+
+  <p-table [value]="reviews()" [loading]="isLoading()" [paginator]="true" [rows]="rows()"
+           [totalRecords]="totalRecords()" [lazy]="true" (onLazyLoad)="onLazyLoad($event)"
+           [tableStyle]="{ 'min-width': '60rem' }" [scrollable]="true">
+    <ng-template #header>
+      <tr>
+        <th>Book</th>
+        <th>User</th>
+        <th>Rating</th>
+        <th>Review</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-review>
+      <tr>
+        <td>
+          <div class="book-info">
+            <span class="book-title">{{ review.book?.title ?? 'Deleted' }}</span>
+            <span class="book-author">{{ review.book?.author ?? '' }}</span>
+          </div>
+        </td>
+        <td>
+          <div class="user-info">
+            <span class="user-name">{{ review.user?.firstName }} {{ review.user?.lastName }}</span>
+            <span class="user-email">{{ review.user?.email ?? '' }}</span>
+          </div>
+        </td>
+        <td>
+          <span class="rating-stars">
+            @for (star of stars; track star) {
+              <i [class]="star <= review.rating ? 'pi pi-star-fill star-filled' : 'pi pi-star star-empty'"></i>
+            }
+          </span>
+        </td>
+        <td class="review-text-cell">
+          <span [pTooltip]="review.text" tooltipPosition="top">
+            {{ truncateText(review.text) }}
+          </span>
+        </td>
+        <td>{{ review.createdAt | date:'mediumDate' }}</td>
+        <td>
+          <p-button icon="pi pi-trash" severity="danger" [text]="true"
+                    (click)="confirmDelete(review)" pTooltip="Delete review" />
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="6" class="empty-message">No reviews found</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-confirmDialog />

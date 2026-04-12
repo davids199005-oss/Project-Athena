@@ -1,0 +1,119 @@
+<div class="landing">
+  <!-- Hero: light mesh + slow drift reads premium; copy stays high-contrast on pale base. -->
+  <section class="hero" id="top">
+    <div class="hero-mesh" aria-hidden="true"></div>
+    <div class="hero-aurora" aria-hidden="true"></div>
+    <div class="hero-visual">
+      <img src="/images/landing/landing1.png" alt="AthenaAI intelligent reading assistant" class="hero-figure hero-figure--primary" />
+    </div>
+    <div class="hero-content animate-fade-in-up">
+      <p class="hero-eyebrow">Premium reading intelligence</p>
+      <h1 class="hero-title">Athena<span class="gradient-text">AI</span></h1>
+      <p class="tagline animate-fade-in-up stagger-1">Your intelligent library — refined, fast, and quietly powerful</p>
+      <p class="description animate-fade-in-up stagger-2">
+        Upload books, read with smart bookmarks, get AI-generated summaries,
+        and chat with an assistant about any title in your collection.
+      </p>
+      <div class="hero-actions animate-fade-in-up stagger-3">
+        @if (isLoggedIn()) {
+          <p-button label="Go to Catalog" routerLink="/catalog" styleClass="p-button-lg" />
+          <p-button label="My Profile" routerLink="/profile" severity="secondary" [outlined]="true" styleClass="p-button-lg" />
+        } @else {
+          <p-button label="Get Started" routerLink="/auth/register" styleClass="p-button-lg" />
+          <p-button label="Sign In" routerLink="/auth/login" severity="secondary" [outlined]="true" styleClass="p-button-lg" />
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature grid: glass cards + icon glow on hover (token-driven). -->
+  <section class="section features" aria-labelledby="features-heading">
+    <h2 id="features-heading" class="section-title">Everything you need for deep reading</h2>
+    <div class="features-grid">
+      <article class="feature-card glass-panel glow-ring-hover animate-fade-in-up stagger-1">
+        <div class="feature-icon icon-bg-1"><i class="pi pi-book"></i></div>
+        <h3>Smart library</h3>
+        <p>Upload EPUB and PDF books with automatic parsing and full-text search.</p>
+      </article>
+      <article class="feature-card glass-panel glow-ring-hover animate-fade-in-up stagger-2">
+        <div class="feature-icon icon-bg-2"><i class="pi pi-microchip-ai"></i></div>
+        <h3>AI summaries</h3>
+        <p>Auto-generated summaries powered by modern language models.</p>
+      </article>
+      <article class="feature-card glass-panel glow-ring-hover animate-fade-in-up stagger-3">
+        <div class="feature-icon icon-bg-3"><i class="pi pi-comments"></i></div>
+        <h3>AI chat</h3>
+        <p>Ask questions about any book and get grounded answers from its content.</p>
+      </article>
+      <article class="feature-card glass-panel glow-ring-hover animate-fade-in-up stagger-4">
+        <div class="feature-icon icon-bg-4"><i class="pi pi-bookmark"></i></div>
+        <h3>Reading progress</h3>
+        <p>Track reading, save bookmarks, and curate favorites.</p>
+      </article>
+      <article class="feature-card glass-panel glow-ring-hover animate-fade-in-up stagger-5">
+        <div class="feature-icon icon-bg-5"><i class="pi pi-heart"></i></div>
+        <h3>Collections</h3>
+        <p>Organize shelves the way you think — not the way files expect.</p>
+      </article>
+      <article class="feature-card glass-panel glow-ring-hover animate-fade-in-up stagger-6">
+        <div class="feature-icon icon-bg-6"><i class="pi pi-sparkles"></i></div>
+        <h3>Quiet polish</h3>
+        <p>A calm interface that stays out of the way when you’re immersed.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Split narrative section: imagery + motion panel for depth. -->
+  <section class="section split-section" aria-label="Product story">
+    <div class="split-visual">
+      <img src="/images/landing/landing2.png" alt="AthenaAI reading interface" class="split-img" loading="lazy" />
+      <div class="split-glow" aria-hidden="true"></div>
+    </div>
+    <div class="split-copy glass-panel">
+      <h2 class="split-title">Designed for focus</h2>
+      <p>
+        Soft gradients, glass surfaces, and gentle motion keep the UI feeling expensive without shouting.
+        Every transition is tuned for readability first — delight second.
+      </p>
+      <ul class="split-list">
+        <li><i class="pi pi-check"></i> Glass panels with crisp typography</li>
+        <li><i class="pi pi-check"></i> Hover glows that guide, not distract</li>
+        <li><i class="pi pi-check"></i> Motion that respects reduced‑motion settings</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section spotlight" aria-label="Highlights">
+    <div class="spotlight-card glass-panel">
+      <img src="/images/landing/landing3.png" alt="AthenaAI book collection" class="spotlight-img" loading="lazy" />
+      <div class="spotlight-text">
+        <h2>Your next chapter, illuminated</h2>
+        <p>
+          Bring the library you already love into a workspace that feels modern — light, airy, and precise.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-strip" aria-label="Call to action">
+    <div class="cta-inner glass-panel">
+      <div>
+        <h2 class="cta-title">Start reading smarter</h2>
+        <p class="cta-sub">Create an account or jump straight into the catalog.</p>
+      </div>
+      <div class="cta-actions">
+        @if (isLoggedIn()) {
+          <p-button label="Open catalog" routerLink="/catalog" />
+          <p-button label="Profile" routerLink="/profile" severity="secondary" [outlined]="true" />
+        } @else {
+          <p-button label="Create account" routerLink="/auth/register" />
+          <p-button label="Sign in" routerLink="/auth/login" severity="secondary" [outlined]="true" />
+        }
+      </div>
+    </div>
+  </section>
+
+  <div class="footer-note">
+    <p>Built by David Veryutin — 2026</p>
+  </div>
+</div>

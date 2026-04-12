@@ -1,0 +1,201 @@
+@use 'styles/breakpoints' as bp;
+
+.chat-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--athena-surface-overlay);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+}
+
+.chat-window {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 400px;
+  height: 550px;
+  background: rgba(255, 253, 250, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--athena-border-glass);
+  border-radius: var(--athena-radius-xl);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  overflow: hidden;
+  box-shadow: var(--athena-shadow-xl), 0 0 40px rgba(45, 181, 168, 0.12);
+  animation: scaleIn 0.35s var(--athena-ease) both;
+
+  @include bp.mobile {
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    right: 0;
+    border-radius: 0;
+  }
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--athena-border-default);
+  background: var(--athena-gradient-cool);
+  color: white;
+
+  :host ::ng-deep .p-button {
+    color: white !important;
+  }
+}
+
+.chat-header-left,
+.chat-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.chat-title {
+  font-family: var(--athena-font-display);
+  font-weight: 400;
+  font-size: 1rem;
+  color: white;
+}
+
+.sessions-panel {
+  border-bottom: 1px solid var(--p-content-border-color);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.session-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background var(--athena-duration-fast) var(--athena-ease);
+
+  &:hover {
+    background: var(--p-content-hover-background);
+  }
+
+  &.active {
+    background: var(--p-highlight-background);
+    color: var(--p-primary-color);
+    font-weight: 500;
+  }
+
+  i {
+    font-size: 0.85rem;
+  }
+
+  span {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.chat-loading,
+.chat-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: var(--p-text-muted-color);
+
+  i {
+    font-size: 2rem;
+    color: var(--athena-ocean);
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+}
+
+.message {
+  display: flex;
+
+  &.user {
+    justify-content: flex-end;
+
+    .message-bubble {
+      background: var(--athena-gradient-primary);
+      color: white;
+      border-radius: 14px 14px 4px 14px;
+      box-shadow: var(--athena-shadow-sm);
+    }
+  }
+
+  &.assistant {
+    justify-content: flex-start;
+
+    .message-bubble {
+      background: var(--athena-surface-elevated);
+      border: 1px solid var(--athena-border-default);
+      border-radius: 14px 14px 14px 4px;
+    }
+  }
+}
+
+.message-bubble {
+  max-width: 80%;
+  padding: 0.65rem 0.95rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.typing {
+  display: flex;
+  gap: 4px;
+  padding: 0.8rem 1.2rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--p-text-muted-color);
+  animation: bounce 1.4s infinite ease-in-out both;
+
+  &:nth-child(1) { animation-delay: 0s; }
+  &:nth-child(2) { animation-delay: 0.2s; }
+  &:nth-child(3) { animation-delay: 0.4s; }
+}
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+.chat-input {
+  display: flex;
+  gap: var(--athena-space-2);
+  padding: var(--athena-space-3);
+  border-top: 1px solid var(--athena-border-default);
+  background: var(--athena-surface-card);
+
+  input {
+    flex: 1;
+    border-radius: var(--athena-radius-full) !important;
+  }
+}

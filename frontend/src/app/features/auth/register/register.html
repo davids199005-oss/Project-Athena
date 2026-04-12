@@ -1,0 +1,78 @@
+<div class="register-container">
+  <div class="register-brand">
+    <div class="brand-shapes">
+      <div class="brand-shape brand-shape-1"></div>
+      <div class="brand-shape brand-shape-2"></div>
+    </div>
+    <div class="brand-content">
+      <h2>AthenaAI</h2>
+      <p>Join our intelligent library</p>
+    </div>
+  </div>
+  <div class="register-form-side">
+    <div class="register-card glass-panel animate-fade-in-up">
+      <h1>Create Account</h1>
+      <p class="subtitle">Join AthenaAI library</p>
+
+      @if (errorMessage()) {
+        <p-message severity="error" [text]="errorMessage()" />
+      }
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="name-row">
+          <div class="field">
+            <label for="firstName">First Name</label>
+            <input pInputText id="firstName" formControlName="firstName" placeholder="First name" autocomplete="given-name" />
+            @if (registerForm.get('firstName')?.touched && registerForm.get('firstName')?.errors) {
+              <small class="error-text">First name is required</small>
+            }
+          </div>
+
+          <div class="field">
+            <label for="lastName">Last Name</label>
+            <input pInputText id="lastName" formControlName="lastName" placeholder="Last name" autocomplete="family-name" />
+            @if (registerForm.get('lastName')?.touched && registerForm.get('lastName')?.errors) {
+              <small class="error-text">Last name is required</small>
+            }
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input pInputText id="email" formControlName="email" placeholder="Enter your email" autocomplete="email" />
+          @if (registerForm.get('email')?.touched && registerForm.get('email')?.errors) {
+            <small class="error-text">
+              @if (registerForm.get('email')?.errors?.['required']) {
+                Email is required
+              } @else {
+                Enter a valid email (e.g. name&#64;example.com)
+              }
+            </small>
+          }
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <p-password id="password" formControlName="password" placeholder="Create a password" [toggleMask]="true" autocomplete="new-password" />
+          @if (registerForm.get('password')?.touched && registerForm.get('password')?.errors) {
+            <small class="error-text">
+              @if (registerForm.get('password')?.errors?.['required']) {
+                Password is required
+              } @else {
+                Password must be at least 8 characters
+              }
+            </small>
+          }
+        </div>
+
+        <p-button type="submit" label="Create Account" [loading]="isLoading()" styleClass="w-full" />
+      </form>
+
+      <app-oauth-buttons />
+
+      <p class="login-link">
+        Already have an account? <a routerLink="/auth/login">Sign in</a>
+      </p>
+    </div>
+  </div>
+</div>

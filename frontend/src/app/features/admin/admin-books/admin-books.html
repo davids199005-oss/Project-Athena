@@ -1,0 +1,125 @@
+<div class="admin-books">
+  <div class="page-header">
+    <h2>Books management</h2>
+    <p-button label="Add book" icon="pi pi-plus" (click)="openCreateDialog()" />
+  </div>
+
+  <div class="filter-bar">
+    <p-iconfield>
+      <p-inputicon styleClass="pi pi-search" />
+      <input pInputText placeholder="Search books..." [value]="searchQuery()"
+             (input)="onSearchInput($any($event.target).value)" />
+    </p-iconfield>
+    <p-select [options]="genres" [(ngModel)]="selectedGenre" placeholder="All genres"
+              [showClear]="true" (onChange)="onGenreFilter()" />
+    @if (searchQuery() || selectedGenre()) {
+      <p-button icon="pi pi-filter-slash" label="Clear" severity="secondary"
+                [text]="true" (click)="clearFilters()" />
+    }
+  </div>
+
+  <p-table [value]="books()" [loading]="isLoading()" [paginator]="true" [rows]="rows()"
+           [totalRecords]="totalRecords()" [lazy]="true" (onLazyLoad)="onLazyLoad($event)"
+           [tableStyle]="{ 'min-width': '60rem' }" [scrollable]="true">
+    <ng-template #header>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Genre</th>
+        <th>Type</th>
+        <th>Rating</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-book>
+      <tr>
+        <td>{{ book.title }}</td>
+        <td>{{ book.author }}</td>
+        <td><p-tag [value]="book.genre" severity="secondary" /></td>
+        <td><p-tag [value]="book.fileType" severity="info" /></td>
+        <td>★ {{ book.rating }}</td>
+        <td class="actions-cell">
+          <p-button icon="pi pi-pencil" severity="info" [text]="true"
+                    (click)="openEditDialog(book)" pTooltip="Edit" />
+          <p-button icon="pi pi-trash" severity="danger" [text]="true"
+                    (click)="confirmDelete(book)" pTooltip="Delete" />
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="6" class="empty-message">No books found</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog [header]="dialogMode() === 'create' ? 'Add new book' : 'Edit book'"
+          [(visible)]="showBookDialog" [modal]="true" [style]="{ width: '550px' }">
+  <div class="dialog-form">
+    <div class="field">
+      <label>Title *</label>
+      <input pInputText [(ngModel)]="newBook.title" />
+    </div>
+    <div class="field">
+      <label>Author *</label>
+      <input pInputText [(ngModel)]="newBook.author" />
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>Genre *</label>
+        <p-select [options]="genres" [(ngModel)]="newBook.genre"
+                  optionLabel="label" optionValue="value" placeholder="Select" />
+      </div>
+      <div class="field">
+        <label>Language *</label>
+        <input pInputText [(ngModel)]="newBook.language" placeholder="en, ru, he" />
+      </div>
+    </div>
+    <div class="field">
+      <label>Description</label>
+      <textarea pTextarea [(ngModel)]="newBook.description" rows="3"></textarea>
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>ISBN</label>
+        <input pInputText [(ngModel)]="newBook.isbn" placeholder="978-3-16-148410-0" />
+      </div>
+      <div class="field">
+        <label>Page count</label>
+        <input pInputText [(ngModel)]="newBook.pageCount" type="number" min="1" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>File type *</label>
+        <p-select [options]="fileTypes" [(ngModel)]="newBook.fileType"
+                  optionLabel="label" optionValue="value"
+                  [disabled]="dialogMode() === 'edit'" />
+      </div>
+      <div class="field">
+        <label>Published year</label>
+        <input pInputText [(ngModel)]="newBook.publishedYear" type="number" />
+      </div>
+    </div>
+    @if (dialogMode() === 'create') {
+      <div class="field">
+        <label>Book file (EPUB/PDF) *</label>
+        <p-fileUpload mode="basic" accept=".epub,.pdf" [auto]="false"
+                      chooseLabel="Choose file" (onSelect)="onBookFileSelect($event)" />
+      </div>
+    }
+    <div class="field">
+      <label>Cover image</label>
+      <p-fileUpload mode="basic" accept=".jpg,.jpeg,.png,.webp" [auto]="false"
+                    chooseLabel="Choose cover" (onSelect)="onCoverFileSelect($event)" />
+    </div>
+  </div>
+  <ng-template #footer>
+    <p-button label="Cancel" severity="secondary" (click)="showBookDialog.set(false)" />
+    <p-button [label]="dialogMode() === 'create' ? 'Create book' : 'Save changes'"
+              icon="pi pi-check" (click)="saveBook()" [loading]="isSaving()" />
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog />

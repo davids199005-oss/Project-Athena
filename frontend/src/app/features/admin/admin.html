@@ -1,0 +1,27 @@
+<div class="admin-layout">
+    <aside class="admin-sidebar" aria-label="Admin navigation">
+      <h2>Admin panel</h2>
+      <nav aria-label="Admin sections">
+        <a routerLink="dashboard" routerLinkActive="active">
+          <i class="pi pi-chart-bar"></i> Dashboard
+        </a>
+        <a routerLink="books" routerLinkActive="active">
+          <i class="pi pi-book"></i> Books
+        </a>
+        <a routerLink="users" routerLinkActive="active">
+          <i class="pi pi-users"></i> Users
+        </a>
+        <a routerLink="reviews" routerLinkActive="active">
+          <i class="pi pi-star"></i> Reviews
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <a routerLink="/catalog" class="back-link">
+          <i class="pi pi-arrow-left"></i> Back to Library
+        </a>
+      </div>
+    </aside>
+    <main class="admin-content">
+      <router-outlet />
+    </main>
+  </div>

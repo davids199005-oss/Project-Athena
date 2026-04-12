@@ -1,0 +1,81 @@
+<div class="reader-container">
+    <div class="reader-toolbar">
+      <p-button icon="pi pi-arrow-left" severity="secondary" [text]="true" (click)="goBack()" />
+      <span class="book-title">{{ book()?.title }}</span>
+      <div class="toolbar-actions">
+        <p-button icon="pi pi-bookmark" severity="secondary" [text]="true"
+                  (click)="showBookmarks.set(true)" [badge]="bookmarks().length.toString()" />
+        <p-button icon="pi pi-save" severity="secondary" [text]="true" (click)="saveProgress()" />
+      </div>
+    </div>
+
+    <div class="reader-progress-bar">
+      <div class="progress-track" role="progressbar" [attr.aria-valuenow]="progressPercent()" aria-valuemin="0" aria-valuemax="100" aria-label="Reading progress">
+        <div class="progress-fill" [style.width.%]="progressPercent()"></div>
+      </div>
+      <span class="progress-label">{{ progressPercent() }}%</span>
+    </div>
+
+    @if (isLoading()) {
+      <div class="reader-loading">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+        <p>Loading book...</p>
+      </div>
+    } @else {
+      @if (book()?.fileType === 'EPUB') {
+        <div class="epub-container">
+          <p-button icon="pi pi-chevron-left" severity="secondary" [text]="true"
+                    styleClass="nav-btn nav-prev" (click)="epubPrev()" />
+          <div #epubArea class="epub-area"></div>
+          <p-button icon="pi pi-chevron-right" severity="secondary" [text]="true"
+                    styleClass="nav-btn nav-next" (click)="epubNext()" />
+        </div>
+      } @else {
+        <div class="pdf-container">
+          <div class="pdf-page-indicator">
+            <span class="pdf-page-current">{{ pdfCurrentPage() }}</span>
+            <span class="pdf-page-sep">of</span>
+            <span class="pdf-page-total">{{ pdfTotalPages() }}</span>
+          </div>
+          <p-button icon="pi pi-chevron-left" severity="secondary" [text]="true"
+                    styleClass="nav-btn nav-prev" (click)="pdfPrev()" [disabled]="pdfCurrentPage() <= 1" />
+          <div class="pdf-scroll">
+            <!--
+              PDF.js renders a bitmap on the canvas and a separate transparent text layer for selection
+              and highlight mapping. Spans must stay aligned with the canvas (see reader.scss).
+            -->
+            <div class="pdf-page-wrapper">
+              <canvas #pdfCanvas></canvas>
+              <div #pdfTextLayer class="pdf-text-layer"></div>
+            </div>
+          </div>
+          <p-button icon="pi pi-chevron-right" severity="secondary" [text]="true"
+                    styleClass="nav-btn nav-next" (click)="pdfNext()" [disabled]="pdfCurrentPage() >= pdfTotalPages()" />
+        </div>
+      }
+    }
+
+    <p-drawer [(visible)]="showBookmarks" header="Bookmarks" position="right" styleClass="bookmarks-drawer">
+      <div class="add-bookmark">
+        <input pInputText [(ngModel)]="newBookmarkTitle" placeholder="Bookmark title (optional)" />
+        <p-button icon="pi pi-plus" (click)="addBookmark()" />
+      </div>
+      @if (bookmarks().length === 0) {
+        <p class="no-bookmarks">No bookmarks yet</p>
+      } @else {
+        <div class="bookmarks-list">
+          @for (bm of bookmarks(); track bm.id) {
+            <div class="bookmark-item">
+              <div class="bookmark-info" (click)="goToBookmark(bm)">
+                <span class="bookmark-title">{{ bm.title || 'Bookmark' }}</span>
+                <span class="bookmark-position">{{ bm.position }}</span>
+              </div>
+              <p-button icon="pi pi-trash" severity="danger" [text]="true"
+                        (click)="removeBookmark(bm.id)" />
+            </div>
+          }
+        </div>
+      }
+    </p-drawer>
+
+  </div>

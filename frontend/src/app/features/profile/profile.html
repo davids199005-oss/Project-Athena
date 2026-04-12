@@ -1,0 +1,293 @@
+<div class="profile-page page-shell">
+    <h1>My profile</h1>
+
+    <p-tabs value="0">
+      <p-tablist>
+        <p-tab value="0">Profile</p-tab>
+        <p-tab value="1">Reading history</p-tab>
+        <p-tab value="2">Favorites</p-tab>
+        <p-tab value="3">Collections</p-tab>
+        <p-tab value="4">Quotes</p-tab>
+        <p-tab value="5">Statistics</p-tab>
+      </p-tablist>
+
+      <p-tabpanels>
+        <p-tabpanel value="0">
+          @if (user(); as user) {
+            <div class="profile-card">
+              <div class="avatar-section">
+                <p-avatar [label]="userInitials()" [image]="user.avatarUrl ? '/' + user.avatarUrl : ''"
+                          size="xlarge" shape="circle" styleClass="profile-avatar" />
+                <label class="avatar-upload-btn" for="avatarInput">
+                  <i class="pi pi-camera"></i>
+                </label>
+                <input type="file" id="avatarInput" accept="image/*" hidden (change)="onAvatarSelect($event)" />
+              </div>
+              <div class="profile-info">
+                <p class="profile-email">{{ user.email }}</p>
+                <p class="profile-role">Role: {{ user.role }}</p>
+                @if (avatarMessage()) {
+                  <p class="avatar-msg">{{ avatarMessage() }}</p>
+                }
+              </div>
+            </div>
+
+            <div class="profile-form">
+              <h3>Edit profile</h3>
+              @if (saveMessage()) {
+                <p-message severity="success" [text]="saveMessage()" />
+              }
+              <div class="form-row">
+                <div class="field">
+                  <label for="firstName">First name</label>
+                  <input pInputText id="firstName" [(ngModel)]="editFirstName" />
+                </div>
+                <div class="field">
+                  <label for="lastName">Last name</label>
+                  <input pInputText id="lastName" [(ngModel)]="editLastName" />
+                </div>
+              </div>
+              <p-button label="Save changes" (click)="saveProfile()" [loading]="isSaving()" />
+            </div>
+
+            <div class="profile-form">
+              <h3>Change password</h3>
+              @if (passwordMessage()) {
+                <p-message severity="success" [text]="passwordMessage()" />
+              }
+              @if (passwordError()) {
+                <p-message severity="error" [text]="passwordError()" />
+              }
+              <div class="form-row">
+                <div class="field">
+                  <label for="currentPassword">Current password</label>
+                  <input pInputText id="currentPassword" type="password" [(ngModel)]="currentPassword" autocomplete="current-password" />
+                </div>
+                <div class="field">
+                  <label for="newPassword">New password</label>
+                  <input pInputText id="newPassword" type="password" [(ngModel)]="newPassword" autocomplete="new-password" />
+                </div>
+              </div>
+              <p-button label="Change password" (click)="changePassword()" severity="secondary" />
+            </div>
+
+            <div class="profile-form">
+              <h3>Change email</h3>
+              @if (emailMessage()) {
+                <p-message severity="success" [text]="emailMessage()" />
+              }
+              @if (emailError()) {
+                <p-message severity="error" [text]="emailError()" />
+              }
+              <div class="form-row">
+                <div class="field">
+                  <label for="newEmail">New email</label>
+                  <input pInputText id="newEmail" type="email" [(ngModel)]="newEmail" />
+                </div>
+                <div class="field">
+                  <label for="emailPassword">Confirm password</label>
+                  <input pInputText id="emailPassword" type="password" [(ngModel)]="emailPassword" autocomplete="current-password" />
+                </div>
+              </div>
+              <p-button label="Change email" (click)="changeEmail()" severity="secondary" />
+            </div>
+          }
+        </p-tabpanel>
+
+        <p-tabpanel value="1">
+          @if (history().length === 0) {
+            <div class="empty-state">
+              <i class="pi pi-book"></i>
+              <p>No reading history yet</p>
+            </div>
+          } @else {
+            <div class="history-list">
+              @for (item of history(); track item.id) {
+                @if (item.book) {
+                  <div class="history-item">
+                    <app-book-card [book]="item.book" />
+                    <div class="history-meta">
+                      <div class="history-progress">
+                        <div class="history-progress-info">
+                          <span class="history-progress-label">Progress</span>
+                          <span class="history-progress-value">{{ item.progressPercent }}%</span>
+                        </div>
+                        <div class="history-progress-track">
+                          <div class="history-progress-fill" [style.width.%]="item.progressPercent"></div>
+                        </div>
+                      </div>
+                      <span class="history-date">
+                        <i class="pi pi-clock"></i>
+                        {{ item.lastReadAt | date:'mediumDate' }}
+                      </span>
+                    </div>
+                  </div>
+                }
+              }
+            </div>
+          }
+        </p-tabpanel>
+
+        <p-tabpanel value="2">
+          @if (favorites().length === 0) {
+            <div class="empty-state">
+              <i class="pi pi-heart"></i>
+              <p>No favorites yet</p>
+            </div>
+          } @else {
+            <div class="favorites-grid">
+              @for (fav of favorites(); track fav.id) {
+                @if (fav.book) {
+                  <app-book-card [book]="fav.book" />
+                }
+              }
+            </div>
+          }
+        </p-tabpanel>
+
+        <p-tabpanel value="3">
+          <div class="collections-header">
+            <h3>My collections</h3>
+            <p-button label="Create collection" icon="pi pi-plus" (click)="showCreateDialog.set(true)" />
+          </div>
+
+          @if (collections().length === 0) {
+            <div class="empty-state">
+              <i class="pi pi-folder"></i>
+              <p>No collections yet</p>
+            </div>
+          } @else {
+            <div class="collections-grid">
+              @for (collection of collections(); track collection.id) {
+                <div class="collection-card">
+                  <a [routerLink]="['/collections', collection.id]" class="collection-link">
+                    <div class="collection-icon">
+                      <i class="pi pi-folder"></i>
+                    </div>
+                    <div class="collection-info">
+                      <span class="collection-name">{{ collection.name }}</span>
+                      <span class="collection-count">{{ collection.bookCount || 0 }} books</span>
+                    </div>
+                  </a>
+                  @if (!collection.isDefault) {
+                    <div class="collection-actions">
+                      <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" severity="secondary" (click)="openRenameDialog(collection)" />
+                      <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (click)="deleteCollection(collection)" />
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </p-tabpanel>
+
+        <p-tabpanel value="4">
+          @if (quotes().length === 0) {
+            <div class="empty-state">
+              <i class="pi pi-bookmark"></i>
+              <p>No quotes yet</p>
+            </div>
+          } @else {
+            <div class="quotes-list">
+              @for (quote of quotes(); track quote.id) {
+                <div class="quote-card">
+                  <blockquote class="quote-text">"{{ quote.text }}"</blockquote>
+                  <div class="quote-meta">
+                    @if (quote.book) {
+                      <a [routerLink]="['/books', quote.bookId]" class="quote-book">
+                        {{ quote.book.title }} — {{ quote.book.author }}
+                      </a>
+                    }
+                    @if (quote.source) {
+                      <span class="quote-source">{{ quote.source }}</span>
+                    }
+                  </div>
+                  @if (quote.note) {
+                    <p class="quote-note">{{ quote.note }}</p>
+                  }
+                  <div class="quote-actions">
+                    <p-button icon="pi pi-trash" severity="danger" [text]="true" [rounded]="true"
+                              (click)="removeQuote(quote.id)" />
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </p-tabpanel>
+
+        <p-tabpanel value="5">
+          @if (stats(); as s) {
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-icon"><i class="pi pi-book"></i></div>
+                <div class="stat-value">{{ s.totalBooks }}</div>
+                <div class="stat-label">Books started</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon"><i class="pi pi-check-circle"></i></div>
+                <div class="stat-value">{{ s.completedBooks }}</div>
+                <div class="stat-label">Completed</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon"><i class="pi pi-spinner"></i></div>
+                <div class="stat-value">{{ s.inProgressBooks }}</div>
+                <div class="stat-label">In progress</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon"><i class="pi pi-percentage"></i></div>
+                <div class="stat-value">{{ s.averageProgress }}%</div>
+                <div class="stat-label">Avg. progress</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon"><i class="pi pi-bookmark"></i></div>
+                <div class="stat-value">{{ s.totalQuotes }}</div>
+                <div class="stat-label">Quotes</div>
+              </div>
+            </div>
+
+            @if (s.monthlyProgress.length > 0) {
+              <h3 class="stats-section-title">Monthly activity</h3>
+              <div class="monthly-chart">
+                @for (m of s.monthlyProgress; track m.month) {
+                  <div class="month-bar">
+                    <div class="month-bar-fill" [style.height.%]="(+m.booksRead / 10) * 100 > 100 ? 100 : (+m.booksRead / 10) * 100"></div>
+                    <span class="month-bar-value">{{ m.booksRead }}</span>
+                    <span class="month-bar-label">{{ m.month.substring(5) }}</span>
+                  </div>
+                }
+              </div>
+            }
+          } @else {
+            <div class="empty-state">
+              <i class="pi pi-chart-bar"></i>
+              <p>Loading statistics...</p>
+            </div>
+          }
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+
+    <!-- Create Collection Dialog -->
+    <p-dialog header="Create collection" [(visible)]="showCreateDialog" [modal]="true" [style]="{ width: '400px' }">
+      <div class="dialog-field">
+        <label for="newCollectionName">Collection name</label>
+        <input pInputText id="newCollectionName" [(ngModel)]="newCollectionName" placeholder="Enter name..." />
+      </div>
+      <ng-template #footer>
+        <p-button label="Cancel" [text]="true" (click)="showCreateDialog.set(false)" />
+        <p-button label="Create" (click)="createCollection()" [disabled]="!newCollectionName.trim()" />
+      </ng-template>
+    </p-dialog>
+
+    <!-- Rename Collection Dialog -->
+    <p-dialog header="Rename collection" [visible]="!!editingCollection()" (visibleChange)="editingCollection.set(null)" [modal]="true" [style]="{ width: '400px' }">
+      <div class="dialog-field">
+        <label for="editCollectionName">Collection name</label>
+        <input pInputText id="editCollectionName" [(ngModel)]="editCollectionName" />
+      </div>
+      <ng-template #footer>
+        <p-button label="Cancel" [text]="true" (click)="editingCollection.set(null)" />
+        <p-button label="Save" (click)="renameCollection()" [disabled]="!editCollectionName.trim()" />
+      </ng-template>
+    </p-dialog>
+  </div>

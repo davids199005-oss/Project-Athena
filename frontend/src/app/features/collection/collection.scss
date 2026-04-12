@@ -1,0 +1,100 @@
+@use 'styles/breakpoints' as bp;
+
+.collection-page {
+  max-width: 1100px;
+}
+
+.collection-header {
+  margin-bottom: 2rem;
+
+  h1 {
+    font-family: var(--athena-font-display);
+    font-size: 2rem;
+    font-weight: 400;
+    margin: 0.5rem 0 0.25rem;
+    color: var(--athena-navy);
+    background: var(--athena-gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--p-text-muted-color);
+  text-decoration: none;
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--p-text-color);
+  }
+}
+
+.collection-book-count {
+  font-size: 0.9rem;
+  color: var(--p-text-muted-color);
+}
+
+.loading-state {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 0;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 4rem 0;
+  color: var(--p-text-muted-color);
+
+  i {
+    font-size: 3rem;
+    color: var(--athena-navy);
+    background: var(--athena-gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  p {
+    font-size: 1.1rem;
+    margin: 0;
+  }
+
+  a {
+    text-decoration: none;
+  }
+}
+
+.collection-books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+
+  @include bp.mobile {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+}
+
+.collection-book-item {
+  position: relative;
+
+  .remove-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  &:hover .remove-btn {
+    opacity: 1;
+  }
+}

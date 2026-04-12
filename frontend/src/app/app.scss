@@ -1,0 +1,58 @@
+// App shell: fixed glass header row — spacing matches --app-top-shell-height in styles.scss
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--athena-page-bg);
+  background-attachment: fixed;
+}
+
+.app-top-shell {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  padding: 0.65rem clamp(1rem, 3vw, 2rem);
+  min-height: var(--app-top-shell-height);
+  box-sizing: border-box;
+
+  background: var(--athena-shell-bg);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border-bottom: 1px solid var(--athena-border-default);
+  box-shadow: var(--athena-shell-shadow);
+  transition:
+    min-height 0.35s var(--athena-ease),
+    padding 0.35s var(--athena-ease),
+    box-shadow 0.35s var(--athena-ease),
+    background 0.35s var(--athena-ease);
+
+  &--scrolled {
+    min-height: var(--app-top-shell-height-scrolled);
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    box-shadow: var(--athena-shadow-md);
+  }
+
+  app-header {
+    flex-shrink: 0;
+  }
+
+  app-navbar {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.content {
+  flex: 1;
+  animation: fadeIn 0.35s var(--athena-ease) both;
+
+  &--with-shell {
+    padding-top: var(--app-top-shell-height);
+  }
+}

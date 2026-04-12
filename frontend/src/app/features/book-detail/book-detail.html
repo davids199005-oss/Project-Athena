@@ -1,0 +1,165 @@
+@if (isLoading()) {
+  <div class="book-detail">
+    <div class="book-hero">
+      <div class="skeleton-cover-lg shimmer"></div>
+      <div class="skeleton-info">
+        <div class="shimmer" style="height:28px;width:60%;border-radius:8px"></div>
+        <div class="shimmer" style="height:18px;width:35%;border-radius:6px;margin-top:0.5rem"></div>
+        <div style="display:flex;gap:0.5rem;margin-top:1rem">
+          <div class="shimmer" style="height:24px;width:64px;border-radius:9999px"></div>
+          <div class="shimmer" style="height:24px;width:56px;border-radius:9999px"></div>
+        </div>
+        <div class="shimmer" style="height:14px;width:45%;border-radius:6px;margin-top:1rem"></div>
+        <div class="shimmer" style="height:80px;width:100%;border-radius:8px;margin-top:1rem"></div>
+      </div>
+    </div>
+  </div>
+} @else if (book(); as book) {
+  <div class="book-detail">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a routerLink="/catalog">Catalog</a>
+      <i class="pi pi-angle-right"></i>
+      <span>{{ book.title }}</span>
+    </nav>
+    <div class="book-hero">
+      <div class="book-cover">
+        <img [src]="coverUrl()" [alt]="book.title" loading="lazy" />
+      </div>
+      <div class="book-info">
+        <h1>{{ book.title }}</h1>
+        <p class="author">{{ book.author }}</p>
+        <div class="meta">
+          <p-tag [value]="book.genre" />
+          <p-tag [value]="book.language" severity="secondary" />
+          <p-tag [value]="book.fileType" severity="info" />
+          @if (book.publishedYear) {
+            <p-tag [value]="book.publishedYear.toString()" severity="secondary" />
+          }
+        </div>
+        <div class="rating-line">
+          <span class="stars" [attr.aria-label]="'Rating: ' + (book.rating | number:'1.1-1') + ' out of 5'">★ {{ book.rating | number:'1.1-1' }}</span>
+          <span class="count">({{ book.ratingsCount }} reviews)</span>
+        </div>
+        @if (book.description) {
+          <p class="description">{{ book.description }}</p>
+        }
+        <div class="actions">
+          <p-button label="Read" icon="pi pi-book" [routerLink]="['/books', book.id, 'read']" />
+          <p-button label="AI Chat" icon="pi pi-comments" severity="secondary"
+                    (click)="openChat()" />
+          <p-button [label]="isFavorite() ? 'Unfavorite' : 'Favorite'"
+                    [icon]="isFavorite() ? 'pi pi-heart-fill' : 'pi pi-heart'"
+                    [severity]="isFavorite() ? 'danger' : 'secondary'"
+                    [outlined]="!isFavorite()"
+                    (click)="toggleFavorite()" />
+          <p-button label="Collections" icon="pi pi-folder" severity="secondary"
+                    [outlined]="true" (click)="collectionsPopover.toggle($event)" />
+          <p-popover #collectionsPopover>
+            <div class="collections-popover">
+              <h4>Add to collection</h4>
+              @for (col of collections(); track col.id) {
+                <label class="collection-toggle">
+                  <input type="checkbox" [checked]="isInCollection(col.id)"
+                         (change)="toggleCollection(col.id)" />
+                  <span>{{ col.name }}</span>
+                </label>
+              }
+              @if (collections().length === 0) {
+                <p class="no-collections">No collections yet</p>
+              }
+            </div>
+          </p-popover>
+        </div>
+      </div>
+    </div>
+
+    <section class="section" aria-labelledby="summary-heading">
+      <div class="section-header">
+        <h2 id="summary-heading">AI Summary</h2>
+        @if (summary()) {
+          <p-button [label]="showSummary() ? 'Hide' : 'Show'" [icon]="showSummary() ? 'pi pi-eye-slash' : 'pi pi-eye'"
+                    severity="secondary" [text]="true" (click)="showSummary.set(!showSummary())" />
+        }
+      </div>
+      @if (summary(); as sum) {
+        @if (showSummary()) {
+          <div class="summary-text">{{ sum.summary }}</div>
+        }
+      } @else {
+        <p-button label="Generate AI Summary" icon="pi pi-sparkles"
+                  severity="secondary" [outlined]="true"
+                  [loading]="summaryLoading()" (click)="loadSummary()" />
+      }
+    </section>
+
+    <section class="section" aria-labelledby="similar-heading">
+      <div class="section-header">
+        <h2 id="similar-heading">Similar Books</h2>
+      </div>
+      @if (recommendations().length > 0) {
+        <div class="recommendations-grid">
+          @for (rec of recommendations(); track rec.id) {
+            <a [routerLink]="['/books', rec.id]" class="rec-card">
+              <div class="rec-cover">
+                @if (rec.coverImageUrl) {
+                  <img [src]="'/' + rec.coverImageUrl" [alt]="rec.title" loading="lazy" />
+                } @else {
+                  <div class="rec-no-cover"><i class="pi pi-book"></i></div>
+                }
+              </div>
+              <div class="rec-info">
+                <span class="rec-title">{{ rec.title }}</span>
+                <span class="rec-author">{{ rec.author }}</span>
+                <span class="rec-meta">
+                  <span class="rec-rating">★ {{ rec.rating }}</span>
+                  <span class="rec-genre">{{ rec.genre }}</span>
+                </span>
+              </div>
+            </a>
+          }
+        </div>
+      } @else if (recommendationsLoading()) {
+        <p class="loading-text">Finding similar books...</p>
+      } @else {
+        <p-button label="Find similar books" icon="pi pi-sparkles" severity="secondary"
+                  [outlined]="true" (click)="loadRecommendations()" />
+      }
+    </section>
+
+    <section class="section" aria-labelledby="reviews-heading">
+      <h2 id="reviews-heading">Reviews</h2>
+
+      <div class="review-form">
+        <h3>Leave a review</h3>
+        @if (reviewError()) {
+          <p-message severity="error" [text]="reviewError()" />
+        }
+        <div class="form-rating">
+          <p-rating [(ngModel)]="newRating" />
+        </div>
+        <textarea pTextarea [(ngModel)]="newReviewText" placeholder="Write your review (optional)"
+                  rows="3" class="review-textarea"></textarea>
+        <p-button label="Submit review" (click)="submitReview()" [loading]="reviewSubmitting()" />
+      </div>
+
+      @if (reviews().length > 0) {
+        <div class="reviews-list">
+          @for (review of reviews(); track review.id) {
+            <div class="review-item">
+              <div class="review-header">
+                <span class="review-author">{{ review.user?.firstName }} {{ review.user?.lastName }}</span>
+                <span class="review-stars">★ {{ review.rating }}</span>
+                <span class="review-date">{{ review.createdAt | date:'mediumDate' }}</span>
+              </div>
+              @if (review.text) {
+                <p class="review-text">{{ review.text }}</p>
+              }
+            </div>
+          }
+        </div>
+      } @else {
+        <p class="no-reviews">No reviews yet. Be the first!</p>
+      }
+    </section>
+  </div>
+}

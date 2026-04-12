@@ -1,0 +1,96 @@
+@use 'styles/breakpoints' as bp;
+
+// Catalog: airy filters + staggered cards — relies on global tokens for gradient text.
+.catalog {
+  @include bp.mobile {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+.catalog-header {
+  margin-bottom: 1.5rem;
+
+  h1 {
+    font-family: var(--athena-font-display);
+    font-size: 2rem;
+    font-weight: 400;
+    margin: 0;
+    color: var(--athena-navy);
+    background: var(--athena-gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+.catalog-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  background: var(--athena-surface-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: var(--athena-space-4) var(--athena-space-6);
+  border-radius: var(--athena-radius-xl);
+  box-shadow: var(--athena-shadow-sm), var(--athena-shadow-inset-glow);
+  border: 1px solid var(--athena-border-card);
+
+  .filter-search {
+    flex: 1;
+    min-width: 200px;
+
+    input {
+      width: 100%;
+    }
+  }
+
+  @include bp.mobile {
+    flex-direction: column;
+    border-radius: var(--athena-radius-md);
+    padding: 1rem;
+  }
+}
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+
+  @include bp.mobile {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+}
+
+.catalog-loading {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 0;
+}
+
+.catalog-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 4rem 0;
+  color: var(--p-text-muted-color);
+
+  i {
+    font-size: 3rem;
+    color: var(--athena-navy);
+    background: var(--athena-gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  p {
+    font-size: 1.1rem;
+    margin: 0;
+  }
+}

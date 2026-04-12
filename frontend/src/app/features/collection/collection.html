@@ -1,0 +1,53 @@
+<div class="collection-page page-shell">
+  @if (isLoading()) {
+    <div class="loading-state">
+      <p-progress-spinner strokeWidth="3" />
+    </div>
+  } @else if (collection(); as col) {
+    <div class="collection-header">
+      <a routerLink="/profile" class="back-link">
+        <i class="pi pi-arrow-left"></i>
+        Back to profile
+      </a>
+      <h1>{{ col.name }}</h1>
+      <span class="collection-book-count">{{ col.collectionBooks?.length || 0 }} books</span>
+    </div>
+
+    @if (!col.collectionBooks || col.collectionBooks.length === 0) {
+      <div class="empty-state">
+        <i class="pi pi-folder-open"></i>
+        <p>This collection is empty</p>
+        <a routerLink="/catalog">
+          <p-button label="Browse catalog" icon="pi pi-search" />
+        </a>
+      </div>
+    } @else {
+      <div class="collection-books-grid">
+        @for (cb of col.collectionBooks; track cb.id) {
+          @if (cb.book) {
+            <div class="collection-book-item">
+              <app-book-card [book]="cb.book" />
+              <p-button
+                icon="pi pi-times"
+                [rounded]="true"
+                [text]="true"
+                severity="danger"
+                class="remove-btn"
+                (click)="removeBook(cb.bookId)"
+                pTooltip="Remove from collection"
+              />
+            </div>
+          }
+        }
+      </div>
+    }
+  } @else {
+    <div class="empty-state">
+      <i class="pi pi-exclamation-circle"></i>
+      <p>Collection not found</p>
+      <a routerLink="/profile">
+        <p-button label="Back to profile" />
+      </a>
+    </div>
+  }
+</div>

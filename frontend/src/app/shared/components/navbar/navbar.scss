@@ -1,0 +1,383 @@
+@use 'styles/breakpoints' as bp;
+
+// Transparent layer: the frosted shell lives on `App` — navbar only lays out interactions.
+.navbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  z-index: 1;
+}
+
+// Right cluster: pinned to the end while `.nav-links` stays viewport-centered.
+.navbar-end {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+  flex: 1;
+  justify-content: flex-end;
+  min-width: 0;
+
+  @include bp.tablet-down {
+    flex: 1;
+    justify-content: flex-end;
+  }
+}
+
+.mobile-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: var(--athena-surface-glass);
+  border: 1px solid var(--athena-border-default);
+  border-radius: var(--athena-radius-sm);
+  padding: 0.45rem 0.6rem;
+  cursor: pointer;
+  color: var(--p-text-color);
+  font-size: 1.1rem;
+  transition:
+    background var(--athena-duration-fast) var(--athena-ease),
+    box-shadow var(--athena-duration-fast) var(--athena-ease);
+
+  &:hover {
+    background: var(--athena-surface-card-hover);
+    box-shadow: var(--athena-shadow-sm);
+  }
+
+  @include bp.tablet-down {
+    display: flex;
+  }
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+
+  a {
+    padding: 0.45rem 0.85rem;
+    border-radius: var(--athena-radius-full);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--p-text-muted-color);
+    transition:
+      background var(--athena-duration-fast) var(--athena-ease),
+      color var(--athena-duration-fast) var(--athena-ease),
+      box-shadow var(--athena-duration-fast) var(--athena-ease);
+    position: relative;
+    white-space: nowrap;
+
+    &:hover {
+      background: var(--athena-surface-hover);
+      color: var(--p-text-color);
+    }
+
+    &.active {
+      color: var(--p-primary-color);
+      background: var(--athena-surface-active);
+      box-shadow: inset 0 0 0 1px var(--athena-border-accent);
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 2px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 1.25rem;
+        height: 3px;
+        border-radius: 3px;
+        background: var(--athena-gradient-primary);
+        opacity: 0.9;
+      }
+    }
+  }
+
+  @include bp.desktop {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: auto;
+  }
+
+  @include bp.tablet-down {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    gap: 0;
+    order: 4;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--athena-border-default);
+
+    &.open {
+      display: flex;
+    }
+
+    a {
+      width: 100%;
+      padding: 0.65rem 1rem;
+      border-radius: var(--athena-radius-sm);
+
+      &.active::after {
+        display: none;
+      }
+
+      &.active {
+        background: var(--p-highlight-background);
+      }
+    }
+  }
+}
+
+// Compact pill CTA — visible on desktop/tablet; stacks on narrow mobile.
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--athena-radius-full);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--p-primary-color);
+  background: var(--athena-surface-card);
+  border: 1px solid var(--athena-border-focus);
+  box-shadow: var(--athena-shadow-sm);
+  transition:
+    transform var(--athena-duration-fast) var(--athena-ease),
+    box-shadow var(--athena-duration-fast) var(--athena-ease),
+    background var(--athena-duration-fast) var(--athena-ease);
+
+  i {
+    font-size: 0.75rem;
+    transition: transform var(--athena-duration-fast) var(--athena-ease);
+  }
+
+  &:hover {
+    background: var(--athena-surface-card-hover);
+    box-shadow: var(--athena-shadow-md), 0 0 20px rgba(45, 181, 168, 0.15);
+    transform: translateY(-1px);
+
+    i {
+      transform: translateX(3px);
+    }
+  }
+
+  @include bp.mobile {
+    display: none;
+  }
+}
+
+.nav-search {
+  flex: 1;
+  max-width: 280px;
+
+  input {
+    width: 100%;
+    font-size: 0.85rem;
+    border-radius: var(--athena-radius-full) !important;
+    border: 1px solid var(--athena-border-default) !important;
+    background: var(--athena-surface-card) !important;
+
+    &:focus {
+      box-shadow: 0 0 0 2px var(--athena-border-focus) !important;
+    }
+  }
+
+  @include bp.tablet-down {
+    max-width: none;
+    flex: 1;
+    min-width: 0;
+    order: 3;
+  }
+}
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+
+  .user-avatar-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  :host ::ng-deep .user-avatar {
+    background: var(--athena-gradient-cool) !important;
+    color: white !important;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    transition:
+      box-shadow var(--athena-duration-normal) var(--athena-ease),
+      transform var(--athena-duration-fast) var(--athena-ease);
+
+    &:hover {
+      box-shadow: 0 0 0 3px rgba(45, 181, 168, 0.35);
+      transform: scale(1.03);
+    }
+  }
+
+  @include bp.mobile {
+    order: 2;
+  }
+}
+
+// ─── Notifications ───
+
+.notification-btn {
+  position: relative;
+  background: var(--athena-surface-glass);
+  border: 1px solid var(--athena-border-default);
+  border-radius: var(--athena-radius-full);
+  cursor: pointer;
+  padding: 0.45rem 0.55rem;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--p-text-color);
+  font-size: 1.05rem;
+  transition:
+    background var(--athena-duration-fast) var(--athena-ease),
+    color 0.2s;
+
+  &:hover {
+    background: var(--athena-surface-hover);
+    color: var(--athena-text-accent);
+  }
+
+  :host ::ng-deep .p-badge {
+    position: absolute;
+    top: -2px;
+    right: -4px;
+    font-size: 0.65rem;
+    min-width: 16px;
+    height: 16px;
+    line-height: 16px;
+  }
+}
+
+.notif-dropdown {
+  width: 340px;
+  max-height: 420px;
+  display: flex;
+  flex-direction: column;
+}
+
+.notif-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--p-surface-border);
+  margin-bottom: 0.5rem;
+}
+
+.notif-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.notif-empty {
+  text-align: center;
+  color: var(--p-text-muted-color);
+  padding: 2rem 0;
+  font-size: 0.9rem;
+}
+
+.notif-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  overflow-y: auto;
+  max-height: 350px;
+}
+
+.notif-item {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.65rem;
+  border-radius: var(--athena-radius-sm);
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: var(--p-surface-hover);
+  }
+
+  &.unread {
+    background: rgba(15, 138, 184, 0.06);
+
+    .notif-item-title {
+      font-weight: 600;
+    }
+  }
+}
+
+.notif-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--p-surface-ground);
+  flex-shrink: 0;
+
+  i {
+    font-size: 0.9rem;
+    color: var(--athena-ocean, #0f8ab8);
+  }
+}
+
+.notif-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.notif-item-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.notif-message {
+  font-size: 0.8rem;
+  color: var(--p-text-muted-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.notif-date {
+  font-size: 0.7rem;
+  color: var(--p-text-muted-color);
+}
+
+@include bp.mobile {
+  .navbar {
+    flex-wrap: wrap;
+  }
+
+  .navbar-end {
+    flex-wrap: nowrap;
+    width: 100%;
+    order: 2;
+  }
+}

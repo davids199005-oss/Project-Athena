@@ -1,0 +1,13 @@
+<a [routerLink]="['/books', book().id]" class="card" [attr.aria-label]="book().title + ' by ' + book().author">
+    <div class="card-cover">
+      <img [src]="getCoverUrl()" [alt]="book().title" loading="lazy" />
+    </div>
+    <div class="card-body">
+      <h3 class="card-title">{{ book().title }}</h3>
+      <p class="card-author">{{ book().author }}</p>
+      <div class="card-meta">
+        <span class="card-rating">{{ getRatingStars() }}</span>
+        <p-tag [value]="book().genre" severity="secondary" />
+      </div>
+    </div>
+  </a>

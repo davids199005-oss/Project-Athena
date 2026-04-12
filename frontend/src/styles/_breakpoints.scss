@@ -1,0 +1,17 @@
+// Shared responsive breakpoints aligned with Tailwind-style defaults (sm/md/lg) so feature
+// SCSS can stay consistent without importing Tailwind mixins into every component.
+@mixin mobile {
+  @media (max-width: 639px) { @content; }
+}
+
+@mixin tablet {
+  @media (min-width: 640px) and (max-width: 1023px) { @content; }
+}
+
+@mixin tablet-down {
+  @media (max-width: 1023px) { @content; }
+}
+
+@mixin desktop {
+  @media (min-width: 1024px) { @content; }
+}

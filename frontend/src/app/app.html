@@ -1,0 +1,19 @@
+<a class="skip-link" href="#main">Skip to content</a>
+<p-toast />
+
+@if (showLayout()) {
+  <!-- Single fixed glass shell: brand (left), centered nav inside navbar, actions (right). -->
+  <div class="app-top-shell" [class.app-top-shell--scrolled]="shellScrolled()">
+    <app-header />
+    <app-navbar />
+  </div>
+}
+
+<main id="main" class="content" [class.content--with-shell]="showLayout()">
+  <router-outlet />
+</main>
+
+@if (showLayout()) {
+  <app-footer />
+}
+<app-chat-widget />
