@@ -22,6 +22,7 @@
 - [Core Capabilities](#core-capabilities)
 - [Tech Stack](#tech-stack)
 - [Quick Start](#quick-start)
+- [Database Setup](#database-setup)
 - [System Architecture](#system-architecture)
 - [Project Anatomy](#project-anatomy)
 - [Integrations](#integrations)
@@ -108,7 +109,31 @@
 - npm 10+
 - PostgreSQL 15+ (local or remote)
 
-### 2) Backend
+### 2) Database
+
+Create a PostgreSQL database and user (change credentials if needed):
+
+```sql
+CREATE DATABASE athena_ai;
+CREATE USER athena_user WITH ENCRYPTED PASSWORD 'athena_password';
+GRANT ALL PRIVILEGES ON DATABASE athena_ai TO athena_user;
+```
+
+Then set matching values in `backend/.env`:
+
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=athena_ai
+DB_USERNAME=athena_user
+DB_PASSWORD=athena_password
+```
+
+> Notes:
+> - In development, schema is created automatically by TypeORM (`synchronize=true` outside production).
+> - The app also tries to run `CREATE EXTENSION IF NOT EXISTS vector`; if your PostgreSQL build does not include `pgvector`, install it first.
+
+### 3) Backend
 
 ```bash
 cd backend
@@ -132,7 +157,7 @@ Backend:
 - Base URL: `http://localhost:4000`
 - API Prefix: `http://localhost:4000/api`
 
-### 3) Frontend
+### 4) Frontend
 
 ```bash
 cd frontend
@@ -145,6 +170,41 @@ Frontend: `http://localhost:4200`
 Dev proxy is already configured in `frontend/proxy.conf.json`:
 - `/api` -> `http://localhost:4000`
 - `/uploads` -> `http://localhost:4000`
+
+## Database Setup
+
+### Option A: local PostgreSQL installation
+
+1. Install PostgreSQL 15+ and ensure `psql` is available.
+2. Run:
+
+```bash
+psql -U postgres -h localhost -p 5432
+```
+
+3. Execute:
+
+```sql
+CREATE DATABASE athena_ai;
+CREATE USER athena_user WITH ENCRYPTED PASSWORD 'athena_password';
+GRANT ALL PRIVILEGES ON DATABASE athena_ai TO athena_user;
+```
+
+4. Update `backend/.env` with the same credentials.
+
+### Option B: Docker (quick local DB)
+
+```bash
+docker run --name athena-postgres -e POSTGRES_USER=athena_user -e POSTGRES_PASSWORD=athena_password -e POSTGRES_DB=athena_ai -p 5432:5432 -d postgres:16
+```
+
+### Verify connection
+
+```bash
+psql -U athena_user -h localhost -p 5432 -d athena_ai -c "SELECT current_database(), current_user;"
+```
+
+If the query returns database and user, backend can connect with the same `DB_*` values.
 
 ## System Architecture
 
