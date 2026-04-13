@@ -92,7 +92,7 @@ export class QueryBooksDto {
 
   @Max(50)
 
-  limit?: number = 12;
+  limit?: number = 10;
 
 
 
