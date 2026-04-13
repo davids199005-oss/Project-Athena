@@ -81,6 +81,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withViewTransitions()),
     provideAnimationsAsync(),
     providePrimeNG({
+      overlayAppendTo: 'body',
       theme: {
         preset: AthenaPreset,
         options: {
