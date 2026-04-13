@@ -40,7 +40,7 @@ export class CatalogComponent implements OnInit {
   selectedSort = BookSortBy.CREATED_AT;
   sortOrder = SortOrder.DESC;
   page = 1;
-  limit = 12;
+  limit = 10;
 
   genres = [
     { label: 'All genres', value: null },
