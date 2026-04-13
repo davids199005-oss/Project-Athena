@@ -41,6 +41,14 @@ initUploadDirs();
  */
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  process.on('uncaughtException', (error) => {
+    console.error('[UNCAUGHT-EXCEPTION] Process survived a thrown error:', error);
+  });
+  process.on('unhandledRejection', (reason) => {
+    console.error('[UNHANDLED-REJECTION]', reason);
+  });
+
   app.use(helmet());
   app.use(cookieParser());
   const configService = app.get(ConfigService);

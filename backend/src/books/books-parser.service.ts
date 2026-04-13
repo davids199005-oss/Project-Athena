@@ -32,7 +32,13 @@ export class BooksParserService {
   }
 
   private async parseEpub(filePath: string): Promise<ParsedSection[]> {
-    const epub = await EPub.createAsync(filePath);
+    let epub: Awaited<ReturnType<typeof EPub.createAsync>>;
+    try {
+      epub = await EPub.createAsync(filePath);
+    } catch (error) {
+      this.logger.error(`EPUB createAsync failed for ${filePath}: ${error}`);
+      return [];
+    }
     const sections: ParsedSection[] = [];
 
     for (const chapter of epub.flow) {
