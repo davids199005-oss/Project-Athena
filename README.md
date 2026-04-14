@@ -40,31 +40,33 @@ Catalog, reader, AI chat over book content, progress tracking, and admin tools i
 
 | Landing | Catalog | Book Details |
 |---|---|---|
-| ![Landing](<docs/Снимок экрана 2026-04-14 011621.png>) | ![Catalog](<docs/Снимок экрана 2026-04-14 011639.png>) | ![Book Details](<docs/Снимок экрана 2026-04-14 011659.png>) |
+| ![Landing](<docs/Снимок экрана 2026-04-14 011621.png>) | ![Catalog](<docs/Снимок экрана 2026-04-14 011639.png>) | ![Book Details](<docs/Снимок экрана 2026-04-14 011748.png>) |
 
-| Collections | Reader |
+| Profile | Profile Statistics |
 |---|---|
-| ![Collections](<docs/Снимок экрана 2026-04-14 011720.png>) | ![Reader](<docs/Снимок экрана 2026-04-14 011748.png>) |
+| ![Profile](<docs/Снимок экрана 2026-04-14 011659.png>) | ![Profile Statistics](<docs/Снимок экрана 2026-04-14 011720.png>) |
 
 ### AI and User Features
 
-| AI Chat | Quotes and Bookmarks | Reading Progress |
+| AI Chat | AI Summary | Reading Progress |
 |---|---|---|
-| ![AI Chat](<docs/Снимок экрана 2026-04-14 011817.png>) | ![Quotes and Bookmarks](<docs/Снимок экрана 2026-04-14 011839.png>) | ![Reading Progress](<docs/Снимок экрана 2026-04-14 011901.png>) |
+| ![AI Chat](<docs/Снимок экрана 2026-04-14 011817.png>) | ![AI Summary](<docs/Снимок экрана 2026-04-14 011839.png>) | ![Reading Progress](<docs/Снимок экрана 2026-04-14 011901.png>) |
 
-| Profile | Authentication | Notifications |
-|---|---|---|
-| ![Profile](<docs/Снимок экрана 2026-04-14 011925.png>) | ![Authentication](<docs/Снимок экрана 2026-04-14 011938.png>) | ![Notifications](<docs/Снимок экрана 2026-04-14 011948.png>) |
+### Authentication
+
+| Registration | Login |
+|---|---|
+| ![Registration](<docs/Снимок экрана 2026-04-14 012113.png>) | ![Login](<docs/Снимок экрана 2026-04-14 012127.png>) |
 
 ### Admin and Management
 
-| Admin Dashboard | Admin Users | Admin Books |
+| Admin Dashboard | Admin Users | Admin Books Management |
 |---|---|---|
-| ![Admin Dashboard](<docs/Снимок экрана 2026-04-14 012003.png>) | ![Admin Users](<docs/Снимок экрана 2026-04-14 012019.png>) | ![Admin Books](<docs/Снимок экрана 2026-04-14 012113.png>) |
+| ![Admin Dashboard](<docs/Снимок экрана 2026-04-14 011925.png>) | ![Admin Users](<docs/Снимок экрана 2026-04-14 012019.png>) | ![Admin Books Management](<docs/Снимок экрана 2026-04-14 011948.png>) |
 
-| Moderation Tools |
+| Add Book Modal |
 |---|
-| ![Moderation Tools](<docs/Снимок экрана 2026-04-14 012127.png>) |
+| ![Add Book Modal](<docs/Снимок экрана 2026-04-14 012003.png>) |
 
 
 
