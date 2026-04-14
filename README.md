@@ -36,33 +36,35 @@ Catalog, reader, AI chat over book content, progress tracking, and admin tools i
 
 ## Screenshots
 
-**Show Landing and Catalog Screenshots**
+### Landing and Catalog
 
-Landing screen
-Catalog view
-Book details
-Collections
-Reader page
+| Landing | Catalog | Book Details |
+|---|---|---|
+| ![Landing](<docs/Снимок экрана 2026-04-14 011621.png>) | ![Catalog](<docs/Снимок экрана 2026-04-14 011639.png>) | ![Book Details](<docs/Снимок экрана 2026-04-14 011659.png>) |
 
+| Collections | Reader |
+|---|---|
+| ![Collections](<docs/Снимок экрана 2026-04-14 011720.png>) | ![Reader](<docs/Снимок экрана 2026-04-14 011748.png>) |
 
+### AI and User Features
 
-**Show AI and User Features Screenshots**
+| AI Chat | Quotes and Bookmarks | Reading Progress |
+|---|---|---|
+| ![AI Chat](<docs/Снимок экрана 2026-04-14 011817.png>) | ![Quotes and Bookmarks](<docs/Снимок экрана 2026-04-14 011839.png>) | ![Reading Progress](<docs/Снимок экрана 2026-04-14 011901.png>) |
 
-AI chat widget
-Quotes and bookmarks
-Reading progress
-Profile page
-Authentication flow
-Notifications
+| Profile | Authentication | Notifications |
+|---|---|---|
+| ![Profile](<docs/Снимок экрана 2026-04-14 011925.png>) | ![Authentication](<docs/Снимок экрана 2026-04-14 011938.png>) | ![Notifications](<docs/Снимок экрана 2026-04-14 011948.png>) |
 
+### Admin and Management
 
+| Admin Dashboard | Admin Users | Admin Books |
+|---|---|---|
+| ![Admin Dashboard](<docs/Снимок экрана 2026-04-14 012003.png>) | ![Admin Users](<docs/Снимок экрана 2026-04-14 012019.png>) | ![Admin Books](<docs/Снимок экрана 2026-04-14 012113.png>) |
 
-**Show Admin and Management Screenshots**
-
-Admin dashboard
-Admin users
-Admin books
-Moderation tools
+| Moderation Tools |
+|---|
+| ![Moderation Tools](<docs/Снимок экрана 2026-04-14 012127.png>) |
 
 
 
