@@ -14,9 +14,12 @@ Catalog, reader, AI chat over book content, progress tracking, and admin tools i
 - [Quick Start](#quick-start)
 - [Database Setup](#database-setup)
 - [System Architecture](#system-architecture)
+- [Folder Architecture](#folder-architecture)
+- [API Endpoints Tree](#api-endpoints-tree)
 - [Project Anatomy](#project-anatomy)
 - [Integrations](#integrations)
 - [Environment Matrix](#environment-matrix)
+- [Security](#security)
 - [Scripts](#scripts)
 - [Troubleshooting](#troubleshooting)
 - [Roadmap](#roadmap)
@@ -292,6 +295,160 @@ flowchart LR
   - `/chat` in `ai/ai.gateway.ts`;
   - `/notifications` in `notification/notification.gateway.ts`.
 
+## Folder Architecture
+
+```text
+Project-Athena/
+├─ frontend/
+│  ├─ src/
+│  │  ├─ app/
+│  │  │  ├─ core/          # infrastructure: API services, guards, interceptors, models
+│  │  │  ├─ features/      # business screens: auth, catalog, reader, admin, profile
+│  │  │  ├─ shared/        # reusable UI components
+│  │  │  ├─ app.config.ts
+│  │  │  └─ app.routes.ts
+│  │  ├─ environments/
+│  │  └─ styles.scss
+│  ├─ proxy.conf.json
+│  └─ package.json
+├─ backend/
+│  ├─ src/
+│  │  ├─ auth/             # authentication, strategies, guards, tokens
+│  │  ├─ users/            # user profile and account logic
+│  │  ├─ books/            # catalog, parsing, chunking, summaries
+│  │  ├─ reading/          # progress, bookmarks, reading flow
+│  │  ├─ collection/       # collections and favorites
+│  │  ├─ review/           # reviews and ratings
+│  │  ├─ ai/               # OpenAI integration + chat gateway
+│  │  ├─ notification/     # inbox APIs + realtime notifications
+│  │  ├─ admin/            # moderation and back-office endpoints
+│  │  ├─ config/           # env schema and config glue
+│  │  ├─ migrations/       # SQL migrations and indexes
+│  │  ├─ app.module.ts
+│  │  └─ main.ts
+│  ├─ uploads/
+│  │  ├─ avatars/
+│  │  └─ covers/
+│  └─ package.json
+└─ README.md
+```
+
+## API Endpoints Tree
+
+Base API prefix: `/api`
+
+```text
+/api
+├─ /auth
+│  ├─ POST   /register
+│  ├─ POST   /login
+│  ├─ POST   /refresh
+│  ├─ POST   /logout
+│  ├─ GET    /google
+│  ├─ GET    /google/callback
+│  ├─ GET    /github
+│  ├─ GET    /github/callback
+│  ├─ POST   /oauth/exchange
+│  └─ GET    /me
+│
+├─ /users
+│  ├─ GET    /me
+│  ├─ PATCH  /me
+│  ├─ PATCH  /me/password
+│  ├─ PATCH  /me/email
+│  ├─ POST   /me/avatar
+│  ├─ GET    /
+│  ├─ PATCH  /:id/role
+│  └─ PATCH  /:id/block
+│
+├─ /books
+│  ├─ GET    /
+│  ├─ GET    /:id
+│  ├─ GET    /:id/file
+│  ├─ GET    /:id/summary
+│  ├─ POST   /:id/embeddings
+│  ├─ POST   /
+│  ├─ PATCH  /:id
+│  ├─ PATCH  /:id/cover
+│  └─ DELETE /:id
+│
+├─ /collections
+│  ├─ POST   /
+│  ├─ GET    /
+│  ├─ GET    /:id
+│  ├─ PATCH  /:id
+│  ├─ DELETE /:id
+│  ├─ POST   /:id/books/:bookId
+│  └─ DELETE /:id/books/:bookId
+│
+├─ /books/:bookId/collections
+│  └─ GET    /
+│
+├─ /books/:bookId/reviews
+│  ├─ POST   /
+│  └─ GET    /
+│
+├─ /reviews/:id
+│  ├─ PATCH  /
+│  └─ DELETE /
+│
+├─ /books/:bookId/progress
+│  ├─ PUT    /
+│  └─ GET    /
+│
+├─ /reading
+│  ├─ GET    /history
+│  └─ GET    /stats
+│
+├─ /books/:bookId/bookmarks
+│  ├─ POST   /
+│  └─ GET    /
+│
+├─ /bookmarks/:id
+│  └─ DELETE /
+│
+├─ /books/:bookId/favorite
+│  ├─ POST   /
+│  └─ DELETE /
+│
+├─ /favorites
+│  └─ GET    /
+│
+├─ /books/:bookId/quotes
+│  ├─ POST   /
+│  └─ GET    /
+│
+├─ /quotes
+│  └─ GET    /
+│
+├─ /quotes/:id
+│  └─ DELETE /
+│
+├─ /notifications
+│  ├─ GET    /
+│  ├─ GET    /unread-count
+│  ├─ PATCH  /:id/read
+│  └─ POST   /read-all
+│
+├─ /ai
+│  ├─ POST   /search
+│  ├─ GET    /recommendations/:bookId
+│  ├─ POST   /sessions
+│  ├─ GET    /sessions
+│  ├─ DELETE /sessions/:id
+│  ├─ GET    /sessions/:id/messages
+│  └─ POST   /sessions/:id/messages
+│
+└─ /admin
+   ├─ GET    /stats
+   ├─ GET    /reviews
+   └─ DELETE /reviews/:id
+```
+
+Realtime namespaces (Socket.IO):
+- `/chat`
+- `/notifications`
+
 ## Project Anatomy
 
 ### Frontend
@@ -359,6 +516,28 @@ All backend variables are validated at startup in `[backend/src/config/env.valid
 | `GITHUB_CLIENT_SECRET`   | Yes      | `...`                                            | GitHub OAuth         |
 | `GITHUB_CALLBACK_URL`    | Yes      | `http://localhost:4000/api/auth/github/callback` | GitHub callback      |
 | `OPENAI_API_KEY`         | Yes      | `sk-...`                                         | OpenAI integration   |
+
+## Security
+
+- **Authentication and authorization**
+  - JWT access/refresh tokens with role-based guards (`guest`, `user`, `admin` boundaries).
+  - OAuth providers (Google/GitHub) for trusted external identity flows.
+- **Input validation**
+  - DTO validation with `class-validator` and transformation via `class-transformer`.
+  - Fail-fast environment validation in `backend/src/config/env.validation.ts`.
+- **HTTP hardening**
+  - `helmet` security headers are enabled at bootstrap.
+  - CORS restricted by `FRONTEND_URL`; credentials handling is explicit.
+- **Rate limiting and abuse protection**
+  - Global throttling via Nest throttler guard for API endpoints.
+  - Auth and AI-heavy routes should keep stricter limits in production.
+- **Secrets and operational safety**
+  - Store all secrets only in environment variables, never in git-tracked files.
+  - Rotate `JWT_*`, OAuth secrets, and `OPENAI_API_KEY` on schedule or incident.
+- **Production checklist**
+  - Disable TypeORM `synchronize` in production.
+  - Run with HTTPS only (TLS termination on gateway/reverse proxy).
+  - Keep dependencies patched and run `npm audit` regularly.
 
 
 ## Scripts
