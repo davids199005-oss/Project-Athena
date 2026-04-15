@@ -1,0 +1,53 @@
+services:
+  postgresql-athena-service:
+    image: postgresql:18
+    environment:
+      - DB_HOST:localhost
+      - DB_PORT:5432
+      - DB_USERNAME:postgres
+      - DB_PASSWORD:123123
+      - DB_NAME:athena_ai
+      - DB_ROOT_PASSWORD:123123
+      
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data
+      - .database/postgres:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "athena_ai"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+#-------------------------------------------------------------------------------------
+
+  backend-athena-service:
+    depends_on:
+      postgresql-athena-service:
+        condition: service_healthy
+
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+
+    image: athena-backend:latest
+    container_name: athena-backend-container
+
+    environment:
+      - DB_HOST=postgresql-athena-service
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=123123
+      - DB_NAME=athena_ai
+    
+    ports:
+      - 4000:4000
+
+    volumes:
+        - backend-athena-volume:/app/uploads
+    
+    restart: unless-stopped
+
+    healthcheck:
+    
