@@ -12,6 +12,7 @@ Catalog, reader, AI chat over book content, progress tracking, and admin tools i
 - [Core Capabilities](#core-capabilities)
 - [Tech Stack](#tech-stack)
 - [Quick Start](#quick-start)
+- [Docker Compose Quick Start](#docker-compose-quick-start)
 - [Database Setup](#database-setup)
 - [System Architecture](#system-architecture)
 - [Folder Architecture](#folder-architecture)
@@ -105,37 +106,12 @@ Catalog, reader, AI chat over book content, progress tracking, and admin tools i
 - Node.js 20+
 - npm 10+
 - PostgreSQL 15+ (local or remote)
+- Docker Desktop + Docker Compose (recommended)
 
-### 2) Database
-
-Create a PostgreSQL database and user (change credentials if needed):
-
-```sql
-CREATE DATABASE athena_ai;
-CREATE USER athena_user WITH ENCRYPTED PASSWORD '123123';
-GRANT ALL PRIVILEGES ON DATABASE athena_ai TO athena_user;
-```
-
-Then set matching values in `backend/.env`:
-
-```env
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=athena_ai
-DB_USERNAME=athena_user
-DB_PASSWORD=123123
-```
-
-> Notes:
->
-> - In development, schema is created automatically by TypeORM (`synchronize=true` outside production).
-> - The app also tries to run `CREATE EXTENSION IF NOT EXISTS vector`; if your PostgreSQL build does not include `pgvector`, install it first.
-
-### 3) Backend
+### 2) Prepare backend env
 
 ```bash
 cd backend
-npm install
 copy .env.example .env
 ```
 
@@ -145,44 +121,68 @@ For macOS/Linux, use:
 cp .env.example .env
 ```
 
-Fill in required values in `backend/.env` (`DB_*`, `JWT_*`, OAuth keys, `OPENAI_API_KEY`) and run:
+Fill in required values in `backend/.env` (`JWT_*`, OAuth keys, `OPENAI_API_KEY`).
+Database values are already aligned with compose defaults:
 
-```bash
-npm run start:dev
+```env
+DB_HOST=db
+DB_PORT=5432
+DB_NAME=athena_ai
+DB_USERNAME=postgres
+DB_PASSWORD=123123
 ```
 
-Backend:
+> Notes:
+>
+> - In development, schema is created automatically by TypeORM (`synchronize=true` outside production).
+> - The app runs `CREATE EXTENSION IF NOT EXISTS vector`, so DB runtime must include `pgvector`.
 
-- Base URL: `http://localhost:4000`
-- API Prefix: `http://localhost:4000/api`
-
-### 4) Frontend
+## Docker Compose Quick Start
 
 ```bash
-cd frontend
-npm install
-npm start
+docker compose up --build -d
 ```
 
-Frontend: `http://localhost:4200`
+Check status:
 
-Dev proxy is already configured in `frontend/proxy.conf.json`:
+```bash
+docker compose ps
+```
 
-- `/api` -> `http://localhost:4000`
-- `/uploads` -> `http://localhost:4000`
+Stop stack:
+
+```bash
+docker compose down
+```
+
+Services and ports:
+
+- Frontend: `http://localhost:4200`
+- Backend: `http://localhost:4000` (`/api` prefix)
+- PostgreSQL + pgvector: `localhost:5432`
 
 ## Database Setup
 
-### Option A: local PostgreSQL installation
+### Option A: Docker Compose (recommended)
 
-1. Install PostgreSQL 15+ and ensure `psql` is available.
-2. Run:
+`compose.yml` already starts PostgreSQL with pgvector support:
+
+- image: `pgvector/pgvector:pg18`
+- db name: `athena_ai`
+- user: `postgres`
+- password: `123123`
+- volume mount: `/var/lib/postgresql` (required for PostgreSQL 18+ images)
+
+The backend waits for DB healthcheck before startup.
+Initialization scripts are loaded from `database/postgres` and must be plain SQL.
+
+### Option B: local PostgreSQL installation
 
 ```bash
 psql -U postgres -h localhost -p 5432
 ```
 
-1. Execute:
+Create DB/user:
 
 ```sql
 CREATE DATABASE athena_ai;
@@ -190,13 +190,7 @@ CREATE USER athena_user WITH ENCRYPTED PASSWORD 'athena_password';
 GRANT ALL PRIVILEGES ON DATABASE athena_ai TO athena_user;
 ```
 
-1. Update `backend/.env` with the same credentials.
-
-### Option B: Docker (quick local DB)
-
-```bash
-docker run --name athena-postgres -e POSTGRES_USER=athena_user -e POSTGRES_PASSWORD=athena_password -e POSTGRES_DB=athena_ai -p 5432:5432 -d postgres:16
-```
+Update `backend/.env` with matching `DB_*` values and set local proxy target for frontend (`http://localhost:4000`).
 
 ### Verify connection
 
@@ -587,8 +581,9 @@ npm run test:e2e
 ### 3) Frontend cannot reach backend locally
 
 - Ensure backend is actually listening on `:4000`.
-- Check `frontend/proxy.conf.json` (`/api` and `/uploads` -> `http://localhost:4000`).
-- Run frontend with `npm start` so proxy config is applied.
+- For Docker Compose, `frontend/proxy.conf.json` should target `http://backend:4000` (container DNS name).
+- For standalone local frontend run (`npm start` outside Docker), switch proxy target to `http://localhost:4000`.
+- Restart frontend after proxy changes.
 
 ### 4) OAuth callback fails
 
@@ -601,6 +596,14 @@ npm run test:e2e
 
 - Check `DB_HOST/DB_PORT/DB_USERNAME/DB_PASSWORD/DB_NAME`.
 - Ensure database exists and is reachable from backend runtime.
+- For PostgreSQL 18 images, keep DB volume mounted to `/var/lib/postgresql` (not `/var/lib/postgresql/data`).
+- If DB fails during init from `database/postgres/athena_ai.sql`, ensure the file is plain SQL (not custom dump format from `pg_dump -Fc`).
+- After switching major Postgres version or changing init scripts, recreate volumes:
+
+```bash
+docker compose down -v
+docker compose up --build -d
+```
 
 ### 6) AI responses do not stream
 
@@ -610,7 +613,6 @@ npm run test:e2e
 
 ## Roadmap
 
-- Docker Compose for one-command local bootstrap.
 - OpenAPI/Swagger docs for external integrations.
 - CI pipeline (lint + tests + build).
 - Demo seed scripts to speed up onboarding.

@@ -1,53 +1,80 @@
 services:
-  postgresql-athena-service:
-    image: postgresql:18
+  db:
+    image: pgvector/pgvector:pg18
+    container_name: athena-db
     environment:
-      - DB_HOST:localhost
-      - DB_PORT:5432
-      - DB_USERNAME:postgres
-      - DB_PASSWORD:123123
-      - DB_NAME:athena_ai
-      - DB_ROOT_PASSWORD:123123
-      
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123123
+      POSTGRES_DB: athena_ai
+    ports:
+      - "5432:5432"
     volumes:
-      - postgresql-data:/var/lib/postgresql/data
-      - .database/postgres:/docker-entrypoint-initdb.d
+      - postgres-data:/var/lib/postgresql
+      - ./database/postgres:/docker-entrypoint-initdb.d:ro
     restart: unless-stopped
-
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "athena_ai"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+      test: ["CMD-SHELL", "pg_isready -U postgres -d athena_ai"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
       start_period: 30s
-#-------------------------------------------------------------------------------------
 
-  backend-athena-service:
-    depends_on:
-      postgresql-athena-service:
-        condition: service_healthy
-
+  backend:
     build:
       context: .
       dockerfile: ./backend/Dockerfile
-
-    image: athena-backend:latest
-    container_name: athena-backend-container
-
+    container_name: athena-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    command: npm run start:dev
     environment:
-      - DB_HOST=postgresql-athena-service
-      - DB_PORT=5432
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=123123
-      - DB_NAME=athena_ai
-    
+      NODE_ENV: development
+      PORT: 4000
+      FRONTEND_URL: http://localhost:4200
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: 123123
+      DB_NAME: athena_ai
+      JWT_ACCESS_SECRET: dev_access_secret
+      JWT_ACCESS_EXPIRATION: 15m
+      JWT_REFRESH_SECRET: dev_refresh_secret
+      JWT_REFRESH_EXPIRATION: 24h
+      GOOGLE_CLIENT_ID: dev_google_client_id
+      GOOGLE_CLIENT_SECRET: dev_google_client_secret
+      GOOGLE_CALLBACK_URL: http://localhost:4000/api/auth/google/callback
+      GITHUB_CLIENT_ID: dev_github_client_id
+      GITHUB_CLIENT_SECRET: dev_github_client_secret
+      GITHUB_CALLBACK_URL: http://localhost:4000/api/auth/github/callback
+      OPENAI_API_KEY: dev_openai_key
     ports:
-      - 4000:4000
-
+      - "4000:4000"
     volumes:
-        - backend-athena-volume:/app/uploads
-    
+      - ./backend:/app
+      - /app/node_modules
+      - backend-uploads:/app/uploads
     restart: unless-stopped
 
-    healthcheck:
+  frontend:
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    container_name: athena-frontend
+    depends_on:
+      backend:
+        condition: service_started
+    command: npm run start -- --host 0.0.0.0 --port 4200
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+  backend-uploads:
     

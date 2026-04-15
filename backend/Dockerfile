@@ -3,4 +3,4 @@ WORKDIR /app
 COPY ./backend/package.json /app
 RUN npm install
 COPY ./backend /app
-ENTRYPOINT npm start
+CMD ["npm", "run", "start"]
