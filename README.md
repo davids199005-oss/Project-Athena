@@ -611,12 +611,6 @@ docker compose up --build -d
 - Ensure WebSocket connects to `/chat` namespace.
 - Check backend logs for `AiService` errors.
 
-## Roadmap
-
-- OpenAPI/Swagger docs for external integrations.
-- CI pipeline (lint + tests + build).
-- Demo seed scripts to speed up onboarding.
-
 ## License
 
 MIT (see `backend/package.json`).
