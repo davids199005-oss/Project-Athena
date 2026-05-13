@@ -613,4 +613,4 @@ docker compose up --build -d
 
 ## License
 
-MIT (see `backend/package.json`).
+MIT 
