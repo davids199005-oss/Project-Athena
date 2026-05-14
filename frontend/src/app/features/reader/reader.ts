@@ -187,9 +187,14 @@ export class ReaderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.pdfDoc.getPage(pageNum).then((page: any) => {
       const canvas = this.pdfCanvas.nativeElement;
       const context = canvas.getContext('2d')!;
-      const containerWidth = this.pdfCanvas.nativeElement.parentElement!.parentElement!.clientWidth - 32;
+      const container = this.pdfCanvas.nativeElement.parentElement!.parentElement!;
+      const availableWidth = container.clientWidth - 32;
+      const availableHeight = container.clientHeight - 32;
       const baseViewport = page.getViewport({ scale: 1 });
-      const scale = containerWidth / baseViewport.width;
+      const scale = Math.min(
+        availableWidth / baseViewport.width,
+        availableHeight / baseViewport.height,
+      );
       const viewport = page.getViewport({ scale });
 
       canvas.height = viewport.height;
