@@ -154,6 +154,7 @@ export class ProfileComponent implements OnInit {
     this.userService.uploadAvatar(file).subscribe({
       next: (updatedUser) => {
         this.authService.setCurrentUser(updatedUser);
+        this.user.set(updatedUser);
         this.avatarVersion.update(v => v + 1);
         this.avatarMessage.set('Avatar updated');
       },
