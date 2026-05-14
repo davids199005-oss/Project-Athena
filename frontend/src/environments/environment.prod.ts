@@ -11,5 +11,5 @@
 export const environment = {
     production: true,
     apiUrl: '/api',
-    wsUrl: '',  // same-origin — Socket.IO will connect to window.location.origin
+    wsUrl: 'https://project-athena.net',  // same-origin — Socket.IO will connect to window.location.origin
   };
