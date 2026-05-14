@@ -55,7 +55,7 @@ export class App implements OnInit {
       .subscribe((event: NavigationEnd) => {
         const url = event.urlAfterRedirects;
         this.showLayout.set(
-          !(url.startsWith('/auth') || (url === '/' && !this.authService.isLoggedIn)),
+          !(url.startsWith('/auth') || url.includes('/read') || (url === '/' && !this.authService.isLoggedIn)),
         );
       });
   }
