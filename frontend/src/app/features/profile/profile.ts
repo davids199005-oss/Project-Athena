@@ -61,6 +61,7 @@ export class ProfileComponent implements OnInit {
   emailMessage = signal('');
   emailError = signal('');
   avatarMessage = signal('');
+  avatarVersion = signal(0);
 
   editFirstName = '';
   editLastName = '';
@@ -153,6 +154,7 @@ export class ProfileComponent implements OnInit {
     this.userService.uploadAvatar(file).subscribe({
       next: (updatedUser) => {
         this.authService.setCurrentUser(updatedUser);
+        this.avatarVersion.update(v => v + 1);
         this.avatarMessage.set('Avatar updated');
       },
       error: () => {
