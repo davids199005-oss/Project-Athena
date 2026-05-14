@@ -27,15 +27,16 @@ import {
   import { LoginDto } from './dto/login.dto';
   import { RefreshTokenGuard } from './guards/refresh-token.guard';
   import { CurrentUser } from './decorators/current-user.decorator';
-  import { User } from '../users/entities/user.entity';
   import { Public } from './decorators/public.decorator';
   import { Throttle } from '@nestjs/throttler';
+  import { UsersService } from '../users/users.service';
 
   @Controller('auth') // Routes: /api/auth/* (global prefix from main.ts)
   export class AuthController {
     constructor(
       private readonly authService: AuthService,
       private readonly configService: ConfigService,
+      private readonly usersService: UsersService,
     ) {}
   
     // ─── POST /api/auth/register ───
@@ -140,8 +141,8 @@ import {
 
     // ─── GET /api/auth/me ───
     @Get('me')
-    getMe(@CurrentUser() user: User) {
-      return user;
+    getMe(@CurrentUser('id') userId: string) {
+      return this.usersService.getMe(userId);
     }
 
     // ─── Private helpers ───

@@ -20,12 +20,12 @@ import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { GitHubStrategy } from './strategies/github.strategy';
 import { CollectionModule } from '../collection/collection.module';
-
+import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
-
+    UsersModule,
     PassportModule,
 
     // JwtModule without global options: access/refresh use different secrets; secrets passed in AuthService.signAsync.
