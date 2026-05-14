@@ -67,7 +67,7 @@ export class BookDetailComponent implements OnInit {
   coverUrl = computed(() => {
     const b = this.book();
     if (!b?.coverImageUrl) return '/assets/no-cover.png';
-    return '/' + b.coverImageUrl;
+    return b.coverImageUrl;
   });
 
   currentUserId = computed(() => this.authService.currentUser?.id || '');
