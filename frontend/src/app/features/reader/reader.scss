@@ -170,21 +170,22 @@
   border: 1px solid var(--athena-border-focus);
   box-shadow: var(--athena-shadow-sm);
 
-.pdf-page-current {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--athena-ocean);
-}
+  .pdf-page-current {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--athena-ocean);
+  }
 
-.pdf-page-sep {
-  font-size: 0.75rem;
-  color: var(--p-text-muted-color);
-}
+  .pdf-page-sep {
+    font-size: 0.75rem;
+    color: var(--p-text-muted-color);
+  }
 
-.pdf-page-total {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--p-text-muted-color);
+  .pdf-page-total {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--p-text-muted-color);
+  }
 }
 
 .pdf-scroll {
@@ -287,5 +288,4 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
 }
