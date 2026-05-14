@@ -151,10 +151,9 @@ export class ProfileComponent implements OnInit {
     if (!file) return;
 
     this.userService.uploadAvatar(file).subscribe({
-      next: () => {
+      next: (updatedUser) => {
+        this.authService.setCurrentUser(updatedUser);
         this.avatarMessage.set('Avatar updated');
-        this.authService.getMe().subscribe();
-        this.loadUser();
       },
       error: () => {
         this.avatarMessage.set('Failed to upload avatar');

@@ -76,6 +76,10 @@ export class AuthService {
     );
   }
 
+  setCurrentUser(user: IUser): void {
+    this.currentUserSubject.next(user);
+  }
+
   get currentUser(): IUser | null {
     return this.currentUserSubject.getValue();
   }
