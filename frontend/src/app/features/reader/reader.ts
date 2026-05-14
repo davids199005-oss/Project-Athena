@@ -160,7 +160,7 @@ export class ReaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private initPdfReader(): void {
     const url = this.bookService.getFileUrl(this.bookId);
-    
+
     pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
     this.http.get(url, { responseType: 'arraybuffer' }).subscribe({
@@ -187,7 +187,9 @@ export class ReaderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.pdfDoc.getPage(pageNum).then((page: any) => {
       const canvas = this.pdfCanvas.nativeElement;
       const context = canvas.getContext('2d')!;
-      const scale = 1.5;
+      const containerWidth = this.pdfCanvas.nativeElement.parentElement!.parentElement!.clientWidth - 32;
+      const baseViewport = page.getViewport({ scale: 1 });
+      const scale = containerWidth / baseViewport.width;
       const viewport = page.getViewport({ scale });
 
       canvas.height = viewport.height;
