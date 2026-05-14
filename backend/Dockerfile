@@ -2,7 +2,6 @@
 FROM node:24-alpine AS builder
 WORKDIR /app
 
-# patches needed BEFORE npm ci — postinstall runs patch-package
 COPY ./backend/package*.json ./
 COPY ./backend/patches ./patches
 RUN npm ci
@@ -17,10 +16,10 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/patches ./patches
-RUN npm ci --omit=dev
+RUN npm ci --omit=dev --ignore-scripts
 
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules/epub2 ./node_modules/epub2
 
 EXPOSE 4000
 CMD ["node", "dist/main"]
