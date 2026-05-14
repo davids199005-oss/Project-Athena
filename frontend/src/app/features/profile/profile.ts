@@ -150,13 +150,16 @@ export class ProfileComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (!file) return;
-
+  
     this.userService.uploadAvatar(file).subscribe({
       next: (updatedUser) => {
-        this.authService.setCurrentUser(updatedUser);
-        this.user.set(updatedUser);
-        this.avatarVersion.update(v => v + 1);
-        this.avatarMessage.set('Avatar updated');
+        this.user.set(null);  // ← сбросить чтобы @if пересоздал p-avatar
+        setTimeout(() => {
+          this.authService.setCurrentUser(updatedUser);
+          this.user.set(updatedUser);
+          this.avatarVersion.update(v => v + 1);
+          this.avatarMessage.set('Avatar updated');
+        }, 50);
       },
       error: () => {
         this.avatarMessage.set('Failed to upload avatar');
