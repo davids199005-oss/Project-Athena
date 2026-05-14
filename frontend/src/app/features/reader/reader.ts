@@ -161,7 +161,10 @@ export class ReaderComponent implements OnInit, AfterViewInit, OnDestroy {
   private initPdfReader(): void {
     const url = this.bookService.getFileUrl(this.bookId);
 
-    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.6.205/pdf.worker.min.mjs`;
+    pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+      'pdfjs-dist/build/pdf.worker.min.mjs',
+      import.meta.url
+    ).toString();
 
     this.http.get(url, { responseType: 'arraybuffer' }).subscribe({
       next: (buffer) => {
