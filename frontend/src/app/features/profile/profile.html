@@ -16,7 +16,7 @@
           @if (user(); as user) {
             <div class="profile-card">
               <div class="avatar-section">
-                <p-avatar [label]="userInitials()" [image]="user.avatarUrl ? '/' + user.avatarUrl : ''"
+                <p-avatar [label]="userInitials()" [image]="user.avatarUrl || ''"
                           size="xlarge" shape="circle" styleClass="profile-avatar" />
                 <label class="avatar-upload-btn" for="avatarInput">
                   <i class="pi pi-camera"></i>
