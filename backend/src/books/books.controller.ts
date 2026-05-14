@@ -22,43 +22,28 @@
 
  */
 
-
-
 import {
-
   Body,
-
   Controller,
-
   Delete,
-
   Get,
-
   Param,
-
   ParseUUIDPipe,
-
   Patch,
-
   Post,
-
   Query,
-
   Res,
-
   UploadedFile,
-
   UploadedFiles,
-
   UseGuards,
-
   UseInterceptors,
-
   BadRequestException,
-
 } from '@nestjs/common';
 
-import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import {
+  FileFieldsInterceptor,
+  FileInterceptor,
+} from '@nestjs/platform-express';
 
 import type { Response } from 'express';
 
@@ -79,22 +64,13 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { UserRole } from '../users/entities/user.entity';
 
 import {
-
   combinedStorage,
-
   combinedFileFilter,
-
   coverStorage,
-
   coverFileFilter,
-
   BOOK_MAX_SIZE,
-
   COVER_MAX_SIZE,
-
 } from '../utils/multer';
-
-
 
 /**
 
@@ -103,20 +79,14 @@ import {
  */
 
 @Controller('books')
-
 export class BooksController {
-
   constructor(private readonly booksService: BooksService) {}
-
-
 
   // ═══════════════════════════════════════════
 
   // Catalog
 
   // ═══════════════════════════════════════════
-
-
 
   /**
 
@@ -125,14 +95,9 @@ export class BooksController {
    */
 
   @Get()
-
   findAll(@Query() query: QueryBooksDto) {
-
     return this.booksService.findAll(query);
-
   }
-
-
 
   /**
 
@@ -141,62 +106,36 @@ export class BooksController {
    */
 
   @Get(':id/file')
-
   async getFile(
-
     @Param('id', ParseUUIDPipe) id: string,
 
     @Res() res: Response,
-
   ) {
-
     const { absolutePath, fileType } = await this.booksService.getFilePath(id);
 
-
-
-    const contentType = fileType === 'EPUB'
-
-      ? 'application/epub+zip'
-
-      : 'application/pdf';
-
-
+    const contentType =
+      fileType === 'EPUB' ? 'application/epub+zip' : 'application/pdf';
 
     res.setHeader('Content-Type', contentType);
 
     res.sendFile(absolutePath);
-
   }
-
-
 
   // GET /api/books/:id/summary
 
   @Get(':id/summary')
-
   async getSummary(@Param('id', ParseUUIDPipe) id: string) {
-
     return this.booksService.getSummary(id);
-
   }
-
-
 
   // POST /api/books/:id/embeddings — recompute chunk embeddings
 
   @Post(':id/embeddings')
-
   @UseGuards(RolesGuard)
-
   @Roles(UserRole.ADMIN)
-
   regenerateEmbeddings(@Param('id', ParseUUIDPipe) id: string) {
-
     return this.booksService.regenerateEmbeddings(id);
-
   }
-
-
 
   /**
 
@@ -205,22 +144,15 @@ export class BooksController {
    */
 
   @Get(':id')
-
   findOne(@Param('id', ParseUUIDPipe) id: string) {
-
     return this.booksService.findOne(id);
-
   }
-
-
 
   // ═══════════════════════════════════════════
 
   // CRUD (ADMIN only)
 
   // ═══════════════════════════════════════════
-
-
 
   /**
 
@@ -229,76 +161,50 @@ export class BooksController {
    */
 
   @Post()
-
   @UseGuards(RolesGuard)
-
   @Roles(UserRole.ADMIN)
-
   @UseInterceptors(
-
     FileFieldsInterceptor(
-
       [
-
         { name: 'file', maxCount: 1 },
 
         { name: 'cover', maxCount: 1 },
-
       ],
 
       {
-
         storage: combinedStorage,
 
         fileFilter: combinedFileFilter,
 
         limits: { fileSize: BOOK_MAX_SIZE },
-
       },
-
     ),
-
   )
-
   create(
-
     @CurrentUser('id') userId: string,
 
     @Body() dto: CreateBookDto,
 
     @UploadedFiles()
-
     files: {
-
       file?: Express.Multer.File[];
 
       cover?: Express.Multer.File[];
-
     },
-
   ) {
-
     if (!files.file || files.file.length === 0) {
-
       throw new BadRequestException('Book file is required (EPUB or PDF)');
-
     }
-
-
 
     const filePath = files.file[0].path;
 
-
-
-    const coverImageUrl = files.cover?.[0]?.path || undefined;
-
-
+    const coverFile = files.cover?.[0];
+    const coverImageUrl = coverFile
+      ? `/uploads/covers/${coverFile.filename}`
+      : undefined;
 
     return this.booksService.create(dto, filePath, coverImageUrl, userId);
-
   }
-
-
 
   /**
 
@@ -307,24 +213,15 @@ export class BooksController {
    */
 
   @Patch(':id')
-
   @UseGuards(RolesGuard)
-
   @Roles(UserRole.ADMIN)
-
   update(
-
     @Param('id', ParseUUIDPipe) id: string,
 
     @Body() dto: UpdateBookDto,
-
   ) {
-
     return this.booksService.update(id, dto);
-
   }
-
-
 
   /**
 
@@ -333,46 +230,28 @@ export class BooksController {
    */
 
   @Patch(':id/cover')
-
   @UseGuards(RolesGuard)
-
   @Roles(UserRole.ADMIN)
-
   @UseInterceptors(
-
     FileInterceptor('cover', {
-
       storage: coverStorage,
 
       fileFilter: coverFileFilter,
 
       limits: { fileSize: COVER_MAX_SIZE },
-
     }),
-
   )
-
   updateCover(
-
     @Param('id', ParseUUIDPipe) id: string,
 
     @UploadedFile() file: Express.Multer.File,
-
   ) {
-
     if (!file) {
-
       throw new BadRequestException('Cover image file is required');
-
     }
 
-
-
-    return this.booksService.updateCover(id, file.path);
-
+    return this.booksService.updateCover(id,`/uploads/covers/${file.filename}`);
   }
-
-
 
   /**
 
@@ -381,18 +260,11 @@ export class BooksController {
    */
 
   @Delete(':id')
-
   @UseGuards(RolesGuard)
-
   @Roles(UserRole.ADMIN)
-
   async remove(@Param('id', ParseUUIDPipe) id: string) {
-
     await this.booksService.remove(id);
 
     return { message: 'Book deleted successfully' };
-
   }
-
 }
-
