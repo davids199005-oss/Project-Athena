@@ -23,7 +23,7 @@ export class BookCardComponent {
 
   getCoverUrl(): string {
     const cover = this.book().coverImageUrl;
-    return cover ? '/' + cover : '/assets/no-cover.png';
+    return cover ? cover : '/assets/no-cover.png';
   }
 
   getRatingStars(): string {
