@@ -16,10 +16,11 @@
           @if (user(); as user) {
             <div class="profile-card">
               <div class="avatar-section">
-                @for (_ of [avatarVersion()]; track _) {
-                  <p-avatar [label]="userInitials()" 
-                            [image]="user.avatarUrl ? user.avatarUrl + '?v=' + avatarVersion() : ''"
-                            size="xlarge" shape="circle" styleClass="profile-avatar" />
+                @if (user.avatarUrl) {
+                  <img [src]="user.avatarUrl + '?v=' + avatarVersion()" 
+                       alt="Avatar" class="profile-avatar-img" />
+                } @else {
+                  <div class="profile-avatar-placeholder">{{ userInitials() }}</div>
                 }
                 <label class="avatar-upload-btn" for="avatarInput">
                   <i class="pi pi-camera"></i>
