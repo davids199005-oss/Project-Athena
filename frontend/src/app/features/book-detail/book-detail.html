@@ -102,7 +102,7 @@
             <a [routerLink]="['/books', rec.id]" class="rec-card">
               <div class="rec-cover">
                 @if (rec.coverImageUrl) {
-                  <img [src]="'/' + rec.coverImageUrl" [alt]="rec.title" loading="lazy" />
+                  <img [src]="rec.coverImageUrl" [alt]="rec.title" loading="lazy" />
                 } @else {
                   <div class="rec-no-cover"><i class="pi pi-book"></i></div>
                 }
