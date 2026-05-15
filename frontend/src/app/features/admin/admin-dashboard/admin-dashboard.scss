@@ -68,19 +68,19 @@
   color: white;
 
   &.users {
-    background: linear-gradient(135deg, #9333ea, #b855f5);
+    background: linear-gradient(135deg, #0f8ab8, #2db5a8);
   }
 
   &.books {
-    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    background: linear-gradient(135deg, #0c2744, #0f8ab8);
   }
 
   &.reviews {
-    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    background: linear-gradient(135deg, #c4a574, #2db5a8);
   }
 
   &.ai {
-    background: linear-gradient(135deg, #10b981, #34d399);
+    background: linear-gradient(135deg, #0f8ab8, #c4a574);
   }
 }
 
@@ -142,6 +142,11 @@
   border-radius: var(--athena-radius-lg);
   padding: 1.25rem;
   box-shadow: var(--athena-shadow-sm);
+  transition: box-shadow var(--athena-duration-fast) var(--athena-ease);
+
+  &:hover {
+    box-shadow: var(--athena-shadow-md);
+  }
 
   h3 {
     font-size: 1rem;

@@ -2,6 +2,7 @@
 
 .profile-page {
   max-width: 920px;
+  animation: fadeIn 0.35s var(--athena-ease) both;
 
   h1 {
     font-family: var(--athena-font-display);
@@ -106,6 +107,13 @@
 }
 
 .profile-form {
+  margin-top: 1rem;
+  padding: 1.25rem;
+  border-radius: var(--athena-radius-lg);
+  border: 1px solid var(--athena-border-subtle);
+  background: var(--athena-surface-card-strong);
+  box-shadow: var(--athena-shadow-sm);
+
   h3 {
     font-size: 1.1rem;
     font-weight: 500;
@@ -274,9 +282,10 @@
 .collection-card {
   display: flex;
   align-items: center;
-  background: var(--p-surface-card);
+  background: var(--athena-surface-card-strong);
   border-radius: var(--athena-radius-md);
   box-shadow: var(--athena-shadow-sm);
+  border: 1px solid var(--athena-border-subtle);
   transition: box-shadow 0.2s var(--athena-ease), transform 0.2s var(--athena-ease);
 
   &:hover {
@@ -351,9 +360,10 @@
   align-items: center;
   gap: 0.5rem;
   padding: 1.5rem 1rem;
-  background: var(--p-surface-card);
+  background: var(--athena-surface-card-strong);
   border-radius: var(--athena-radius-md);
   box-shadow: var(--athena-shadow-sm);
+  border: 1px solid var(--athena-border-subtle);
   text-align: center;
   transition: transform 0.2s var(--athena-ease), box-shadow 0.2s;
 
@@ -406,9 +416,10 @@
   gap: 1rem;
   height: 160px;
   padding: 1rem;
-  background: var(--p-surface-card);
+  background: var(--athena-surface-card-strong);
   border-radius: var(--athena-radius-md);
   box-shadow: var(--athena-shadow-sm);
+  border: 1px solid var(--athena-border-subtle);
 }
 
 .month-bar {
@@ -451,10 +462,13 @@
 
 .quote-card {
   padding: 1.25rem;
-  background: var(--p-surface-card);
+  background: var(--athena-surface-card-strong);
   border-radius: var(--athena-radius-md);
   box-shadow: var(--athena-shadow-sm);
   border-left: 4px solid var(--athena-ocean, #0f8ab8);
+  border-top: 1px solid var(--athena-border-subtle);
+  border-right: 1px solid var(--athena-border-subtle);
+  border-bottom: 1px solid var(--athena-border-subtle);
   position: relative;
 }
 

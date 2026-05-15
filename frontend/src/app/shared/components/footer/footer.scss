@@ -7,12 +7,22 @@
   background: linear-gradient(135deg, #0a1f33 0%, #0c2744 42%, #0f4f6d 100%);
   border-top: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 -12px 40px rgba(12, 39, 68, 0.12);
+  backdrop-filter: saturate(115%);
 
   &::before {
     content: '';
     position: absolute;
     inset: 0;
     background: radial-gradient(ellipse 80% 60% at 20% 0%, rgba(45, 181, 168, 0.2), transparent 55%);
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: auto 12% 0 12%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
     pointer-events: none;
   }
 }
@@ -29,7 +39,7 @@
   margin: 0 0 0.5rem;
   font-size: 0.92rem;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
   color: var(--athena-text-on-dark);
 }
 
@@ -48,5 +58,11 @@
       color: #ffffff;
       text-decoration: underline;
     }
+  }
+}
+
+@media (max-width: 640px) {
+  .footer {
+    padding: 1.9rem 1rem;
   }
 }

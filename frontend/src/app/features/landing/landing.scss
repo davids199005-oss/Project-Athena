@@ -134,6 +134,7 @@
 // ===== SECTIONS =====
 .section {
   padding: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 4vw, 2.5rem);
+  position: relative;
 }
 
 .section-title {
@@ -152,10 +153,26 @@
   margin: 0 auto;
 }
 
+.features {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 8% 0 auto 0;
+    height: 40%;
+    background: radial-gradient(circle at 50% 0, rgba(15, 138, 184, 0.08), transparent 70%);
+    pointer-events: none;
+  }
+}
+
 .feature-card {
   text-align: left;
   padding: 1.75rem 1.5rem;
   border-radius: var(--athena-radius-lg);
+  background: var(--athena-surface-elevated-strong);
+  border: 1px solid var(--athena-border-subtle);
+  box-shadow: var(--athena-shadow-sm);
 
   h3 {
     font-size: 1.1rem;
@@ -281,6 +298,7 @@
   align-items: center;
   padding: 1.5rem;
   border-radius: var(--athena-radius-xl);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.86), rgba(245, 251, 253, 0.9));
 
   @include bp.tablet-down {
     grid-template-columns: 1fr;
@@ -322,6 +340,8 @@
   gap: 1.5rem;
   flex-wrap: wrap;
   background: linear-gradient(135deg, var(--athena-surface-elevated), rgba(238, 248, 252, 0.75));
+  border: 1px solid var(--athena-border-subtle);
+  box-shadow: var(--athena-shadow-md);
 }
 
 .cta-title {

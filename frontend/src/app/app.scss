@@ -5,6 +5,10 @@
   min-height: 100vh;
   background: var(--athena-page-bg);
   background-attachment: fixed;
+
+  @media (max-width: 900px) {
+    background-attachment: scroll;
+  }
 }
 
 .app-top-shell {
@@ -30,6 +34,16 @@
     padding 0.35s var(--athena-ease),
     box-shadow 0.35s var(--athena-ease),
     background 0.35s var(--athena-ease);
+  isolation: isolate;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(15, 138, 184, 0.08), rgba(45, 181, 168, 0.05), rgba(232, 220, 196, 0.08));
+    pointer-events: none;
+    z-index: -1;
+  }
 
   &--scrolled {
     min-height: var(--app-top-shell-height-scrolled);
@@ -46,6 +60,18 @@
     flex: 1;
     min-width: 0;
   }
+
+  @media (max-width: 900px) {
+    gap: 0.65rem;
+    padding-inline: clamp(0.75rem, 3vw, 1.25rem);
+  }
+
+  @media (max-width: 640px) {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding-top: 0.55rem;
+    padding-bottom: 0.55rem;
+  }
 }
 
 .content {
@@ -54,5 +80,6 @@
 
   &--with-shell {
     padding-top: var(--app-top-shell-height);
+    min-height: calc(100vh - var(--app-top-shell-height));
   }
 }

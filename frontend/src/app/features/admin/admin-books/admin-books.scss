@@ -1,6 +1,8 @@
 @use 'styles/breakpoints' as bp;
 
 .admin-books {
+  animation: fadeIn 0.3s var(--athena-ease) both;
+
   .page-header {
     display: flex;
     align-items: center;
@@ -26,6 +28,11 @@
   gap: 0.75rem;
   margin-bottom: 1.25rem;
   flex-wrap: wrap;
+  padding: 0.9rem;
+  border-radius: var(--athena-radius-lg);
+  border: 1px solid var(--athena-border-subtle);
+  background: var(--athena-surface-card-strong);
+  box-shadow: var(--athena-shadow-sm);
 
   p-iconfield {
     flex: 1;
@@ -50,13 +57,6 @@
       max-width: none;
     }
   }
-}
-
-:host ::ng-deep .p-datatable-thead > tr > th {
-  background: var(--athena-gradient-primary) !important;
-  color: white !important;
-  border: none !important;
-  font-weight: 600;
 }
 
 .actions-cell {

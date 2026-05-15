@@ -24,6 +24,10 @@
   }
 }
 
+.catalog {
+  animation: fadeIn 0.38s var(--athena-ease) both;
+}
+
 .catalog-filters {
   display: flex;
   gap: 1rem;
@@ -36,6 +40,9 @@
   border-radius: var(--athena-radius-xl);
   box-shadow: var(--athena-shadow-sm), var(--athena-shadow-inset-glow);
   border: 1px solid var(--athena-border-card);
+  position: sticky;
+  top: calc(var(--app-top-shell-height) + 0.9rem);
+  z-index: 4;
 
   .filter-search {
     flex: 1;
@@ -50,6 +57,7 @@
     flex-direction: column;
     border-radius: var(--athena-radius-md);
     padding: 1rem;
+    position: static;
   }
 }
 
@@ -63,6 +71,13 @@
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 1rem;
   }
+}
+
+:host ::ng-deep .p-paginator {
+  border-radius: var(--athena-radius-lg);
+  border: 1px solid var(--athena-border-subtle);
+  background: var(--athena-surface-card-strong);
+  box-shadow: var(--athena-shadow-sm);
 }
 
 .catalog-loading {

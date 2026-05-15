@@ -1,1 +1,36 @@
-<p>ai-chat works!</p>
+<section class="ai-chat-page page-shell">
+  <div class="ai-chat-hero section-shell">
+    <p class="ai-chat-eyebrow">Athena intelligence</p>
+    <h1 class="page-title">AI Chat Workspace</h1>
+    <p class="ai-chat-subtitle">
+      Обсуждай книги, получай объяснения сложных фрагментов и быстрые сводки.
+      Полный чат доступен через виджет в правом нижнем углу.
+    </p>
+    <div class="ai-chat-actions">
+      <a routerLink="/catalog">
+        <p-button label="Выбрать книгу" icon="pi pi-book" />
+      </a>
+      <a routerLink="/profile">
+        <p-button label="Открыть профиль" icon="pi pi-user" severity="secondary" [outlined]="true" />
+      </a>
+    </div>
+  </div>
+
+  <div class="ai-chat-grid">
+    <article class="ai-chat-card elevated-panel interactive-lift">
+      <i class="pi pi-bolt"></i>
+      <h2>Быстрые ответы</h2>
+      <p>Спроси краткое содержание главы, мотивацию персонажа или главные идеи книги.</p>
+    </article>
+    <article class="ai-chat-card elevated-panel interactive-lift">
+      <i class="pi pi-sparkles"></i>
+      <h2>Контекст по книге</h2>
+      <p>Ответы основаны на контенте выбранного произведения, а не на абстрактных догадках.</p>
+    </article>
+    <article class="ai-chat-card elevated-panel interactive-lift">
+      <i class="pi pi-comments"></i>
+      <h2>Непрерывный диалог</h2>
+      <p>Поддерживай длинный диалог по сессии и возвращайся к нужным вопросам позже.</p>
+    </article>
+  </div>
+</section>

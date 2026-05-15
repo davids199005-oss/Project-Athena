@@ -92,6 +92,8 @@
   max-width: 440px;
   padding: 2rem 1.75rem;
   border-radius: var(--athena-radius-xl);
+  border: 1px solid var(--athena-border-subtle);
+  box-shadow: var(--athena-shadow-lg);
 
   h1 {
     margin: 0 0 0.5rem;
@@ -126,6 +128,14 @@
   }
 }
 
+:host ::ng-deep .p-password {
+  width: 100%;
+}
+
+:host ::ng-deep .p-message {
+  margin-bottom: 1rem;
+}
+
 .error-text {
   color: var(--p-red-500);
   font-size: 0.8rem;
@@ -145,5 +155,15 @@
     &:hover {
       text-decoration: underline;
     }
+  }
+}
+
+@include bp.mobile {
+  .login-form-side {
+    padding: 1rem;
+  }
+
+  .login-card {
+    padding: 1.4rem 1.1rem;
   }
 }

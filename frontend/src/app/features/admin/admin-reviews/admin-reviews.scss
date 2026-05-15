@@ -1,6 +1,8 @@
 @use 'styles/breakpoints' as bp;
 
 .admin-reviews {
+  animation: fadeIn 0.3s var(--athena-ease) both;
+
   .page-header {
     margin-bottom: 1.5rem;
 
@@ -17,11 +19,8 @@
   }
 }
 
-:host ::ng-deep .p-datatable-thead > tr > th {
-  background: var(--athena-gradient-primary) !important;
-  color: white !important;
-  border: none !important;
-  font-weight: 600;
+:host ::ng-deep .p-datatable {
+  background: var(--athena-surface-card-strong);
 }
 
 .book-info,

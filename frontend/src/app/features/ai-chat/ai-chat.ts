@@ -12,10 +12,12 @@
  * bundles in mind if this becomes heavy. No providers here, so it inherits app-wide services.
  */
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { Button } from 'primeng/button';
 
 @Component({
   selector: 'app-ai-chat',
-  imports: [],
+  imports: [RouterLink, Button],
   templateUrl: './ai-chat.html',
   styleUrl: './ai-chat.scss',
 })

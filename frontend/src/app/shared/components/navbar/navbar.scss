@@ -43,11 +43,13 @@
   font-size: 1.1rem;
   transition:
     background var(--athena-duration-fast) var(--athena-ease),
-    box-shadow var(--athena-duration-fast) var(--athena-ease);
+    box-shadow var(--athena-duration-fast) var(--athena-ease),
+    transform var(--athena-duration-fast) var(--athena-ease);
 
   &:hover {
     background: var(--athena-surface-card-hover);
     box-shadow: var(--athena-shadow-sm);
+    transform: translateY(-1px);
   }
 
   @include bp.tablet-down {
@@ -114,6 +116,11 @@
     order: 4;
     padding-top: 0.5rem;
     border-top: 1px solid var(--athena-border-default);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.92));
+    border-radius: var(--athena-radius-md);
+    margin-top: 0.5rem;
+    box-shadow: var(--athena-shadow-sm);
+    animation: fadeInUp 0.28s var(--athena-ease) both;
 
     &.open {
       display: flex;
@@ -121,7 +128,7 @@
 
     a {
       width: 100%;
-      padding: 0.65rem 1rem;
+      padding: 0.75rem 1rem;
       border-radius: var(--athena-radius-sm);
 
       &.active::after {
@@ -195,6 +202,7 @@
     flex: 1;
     min-width: 0;
     order: 3;
+    margin-top: 0.25rem;
   }
 }
 
@@ -254,11 +262,13 @@
   font-size: 1.05rem;
   transition:
     background var(--athena-duration-fast) var(--athena-ease),
-    color 0.2s;
+    color 0.2s,
+    transform var(--athena-duration-fast) var(--athena-ease);
 
   &:hover {
     background: var(--athena-surface-hover);
     color: var(--athena-text-accent);
+    transform: translateY(-1px);
   }
 
   :host ::ng-deep .p-badge {
@@ -277,6 +287,10 @@
   max-height: 420px;
   display: flex;
   flex-direction: column;
+
+  @include bp.mobile {
+    width: min(92vw, 340px);
+  }
 }
 
 .notif-header {

@@ -1,0 +1,75 @@
+@use 'styles/breakpoints' as bp;
+
+.ai-chat-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  animation: fadeIn 0.35s var(--athena-ease) both;
+}
+
+.ai-chat-hero {
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.ai-chat-eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--athena-ocean-dark);
+}
+
+.ai-chat-subtitle {
+  margin: 0.85rem 0 0;
+  max-width: 760px;
+  line-height: 1.7;
+  color: var(--athena-text-secondary);
+}
+
+.ai-chat-actions {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.ai-chat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+
+  @include bp.tablet-down {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ai-chat-card {
+  padding: 1.15rem;
+
+  i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--athena-radius-sm);
+    background: var(--athena-gradient-primary);
+    color: white;
+    box-shadow: var(--athena-shadow-sm);
+  }
+
+  h2 {
+    margin: 0.85rem 0 0.45rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--athena-navy);
+  }
+
+  p {
+    margin: 0;
+    line-height: 1.65;
+    font-size: 0.92rem;
+    color: var(--athena-text-secondary);
+  }
+}

@@ -25,16 +25,22 @@
 
   // ── Semantic surfaces ──
   --athena-surface-card: rgba(255, 255, 255, 0.78);
+  --athena-surface-card-strong: rgba(255, 255, 255, 0.92);
   --athena-surface-card-hover: rgba(255, 255, 255, 0.95);
   --athena-surface-elevated: rgba(255, 255, 255, 0.88);
+  --athena-surface-elevated-strong: rgba(255, 255, 255, 0.96);
   --athena-surface-glass: rgba(255, 255, 255, 0.55);
   --athena-surface-overlay: rgba(12, 39, 68, 0.35);
   --athena-surface-hover: rgba(15, 138, 184, 0.08);
   --athena-surface-active: rgba(45, 181, 168, 0.12);
+  --athena-surface-table-head: linear-gradient(125deg, #0f8ab8 0%, #2db5a8 100%);
+  --athena-surface-table-row: rgba(255, 255, 255, 0.9);
+  --athena-surface-table-row-hover: rgba(15, 138, 184, 0.06);
 
   // ── Semantic borders ──
   --athena-border-default: rgba(12, 39, 68, 0.08);
   --athena-border-subtle: rgba(12, 39, 68, 0.06);
+  --athena-border-strong: rgba(12, 39, 68, 0.14);
   --athena-border-card: rgba(255, 255, 255, 0.65);
   --athena-border-glass: rgba(255, 255, 255, 0.7);
   --athena-border-focus: rgba(15, 138, 184, 0.22);
@@ -122,8 +128,10 @@
   --athena-ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --athena-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --athena-duration-fast: 0.2s;
+  --athena-duration-micro: 0.14s;
   --athena-duration-normal: 0.3s;
   --athena-duration-slow: 0.55s;
+  --athena-duration-page: 0.42s;
 
   // Typography — body set in index.html; display used in headings via utility / components
   --athena-font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
@@ -307,6 +315,45 @@ h3,
   box-shadow: var(--athena-shadow-sm), var(--athena-shadow-inset-glow);
 }
 
+.elevated-panel {
+  background: var(--athena-surface-elevated-strong);
+  border: 1px solid var(--athena-border-subtle);
+  border-radius: var(--athena-radius-lg);
+  box-shadow: var(--athena-shadow-sm), var(--athena-shadow-inset-glow);
+}
+
+.interactive-lift {
+  transition:
+    transform var(--athena-duration-fast) var(--athena-ease),
+    box-shadow var(--athena-duration-fast) var(--athena-ease),
+    border-color var(--athena-duration-fast) var(--athena-ease);
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: var(--athena-border-accent);
+    box-shadow: var(--athena-shadow-md), 0 0 24px rgba(45, 181, 168, 0.12);
+  }
+}
+
+.section-shell {
+  border-radius: var(--athena-radius-xl);
+  border: 1px solid var(--athena-border-subtle);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(247, 251, 253, 0.9) 100%);
+  box-shadow: var(--athena-shadow-sm);
+}
+
+.page-title {
+  margin: 0;
+  font-family: var(--athena-font-display);
+  font-size: clamp(1.45rem, 2.7vw, 2rem);
+  font-weight: 400;
+  color: var(--athena-navy);
+  background: var(--athena-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .glow-ring-hover {
   transition:
     box-shadow var(--athena-duration-normal) var(--athena-ease),
@@ -351,6 +398,66 @@ h3,
   }
 }
 
+.p-inputtext,
+.p-select,
+.p-multiselect,
+.p-inputnumber-input,
+.p-password-input,
+.p-textarea {
+  border-color: var(--athena-border-default) !important;
+  background: var(--athena-surface-card-strong) !important;
+  border-radius: var(--athena-radius-md) !important;
+  transition:
+    border-color var(--athena-duration-micro) var(--athena-ease),
+    box-shadow var(--athena-duration-micro) var(--athena-ease),
+    background var(--athena-duration-micro) var(--athena-ease) !important;
+}
+
+.p-inputtext:hover,
+.p-select:hover,
+.p-multiselect:hover,
+.p-inputnumber-input:hover,
+.p-password-input:hover,
+.p-textarea:hover {
+  border-color: var(--athena-border-strong) !important;
+}
+
+.p-inputtext:focus,
+.p-inputtext:focus-visible,
+.p-inputtext.p-focus,
+.p-select.p-focus,
+.p-multiselect.p-focus,
+.p-inputnumber-input:focus,
+.p-password-input:focus,
+.p-textarea:focus {
+  border-color: rgba(15, 138, 184, 0.38) !important;
+  box-shadow: 0 0 0 3px rgba(15, 138, 184, 0.16) !important;
+}
+
+.p-datatable {
+  border: 1px solid var(--athena-border-subtle);
+  border-radius: var(--athena-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--athena-shadow-sm);
+  background: var(--athena-surface-table-row);
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+  background: var(--athena-surface-table-head);
+  color: white;
+  border: none;
+  font-weight: 600;
+}
+
+.p-datatable .p-datatable-tbody > tr {
+  background: var(--athena-surface-table-row);
+  transition: background var(--athena-duration-fast) var(--athena-ease);
+}
+
+.p-datatable .p-datatable-tbody > tr:hover {
+  background: var(--athena-surface-table-row-hover);
+}
+
 // Keep user popup menu fully inside viewport on narrow screens.
 .user-menu-popup.p-menu-overlay {
   width: min(260px, calc(100vw - 1rem));
@@ -376,6 +483,12 @@ h3,
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .interactive-lift:hover,
+  .glow-ring-hover:hover {
+    transform: none !important;
+    box-shadow: var(--athena-shadow-sm) !important;
   }
 }
 
@@ -410,9 +523,9 @@ h3,
 }
 
 ::view-transition-old(root) {
-  animation: fadeOut 0.2s var(--athena-ease) both;
+  animation: fadeOut 0.22s var(--athena-ease) both;
 }
 
 ::view-transition-new(root) {
-  animation: fadeIn 0.25s var(--athena-ease) both;
+  animation: fadeIn var(--athena-duration-page) var(--athena-ease) both;
 }
