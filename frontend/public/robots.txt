@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /reader/
+Disallow: /admin/
+
+Sitemap: https://project-athena.net/sitemap.xml
