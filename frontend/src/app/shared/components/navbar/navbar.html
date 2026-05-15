@@ -73,11 +73,14 @@
       (click)="userMenu.toggle($event)"
       aria-label="Open profile menu"
     >
+    @if (user()?.avatarUrl) {
+      <img [src]="user()!.avatarUrl!" alt="Avatar" class="user-avatar-img" />
+    } @else {
       <p-avatar [label]="userInitials()"
-                [image]="user()?.avatarUrl || ''"
                 shape="circle"
                 size="normal"
                 styleClass="user-avatar" />
+    }
     </button>
     <p-menu
       #userMenu
